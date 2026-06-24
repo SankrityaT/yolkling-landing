@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>yolkling postboard</title>
+<style>
+  :root{ --bg:#FBF6EC; --bg2:#F4EAD6; --card:#fff; --ink:#2A241B; --soft:#6E5C49; --mut:#A8937D;
+         --yolk:#FFC23B; --grape:#7B5CF0; --line:rgba(42,36,27,.12); --reddit:#FF4500;
+         --inbox:#C9A24B; --ready:#4F9D69; --posted:#8A7BD8; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--ink); font:14px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,sans-serif; }
+  header{ position:sticky; top:0; z-index:5; background:var(--bg); border-bottom:1px solid var(--line); padding:14px 18px 10px; }
+  h1{ margin:0 0 8px; font-size:18px; display:flex; align-items:center; gap:8px; }
+  .dot{ width:12px; height:12px; border-radius:50%; background:var(--yolk); box-shadow:0 0 0 4px rgba(255,194,59,.25); }
+  .stats{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:8px; }
+  .stat{ background:var(--bg2); border:1px solid var(--line); border-radius:10px; padding:5px 10px; font-size:12px; color:var(--soft); }
+  .stat b{ color:var(--ink); }
+  .stat.x b{ color:#111; } .stat.reddit b{ color:var(--reddit); }
+  .filters{ display:flex; flex-wrap:wrap; gap:6px; align-items:center; }
+  .chip{ background:transparent; border:1px solid var(--line); border-radius:999px; padding:5px 12px; font-size:12px; color:var(--soft); cursor:pointer; }
+  .chip.on{ background:var(--ink); color:var(--bg); border-color:var(--ink); }
+  .chip.live{ border-color:var(--reddit); color:var(--reddit); }
+  .chip.live.on{ background:var(--reddit); color:#fff; }
+  .board{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; padding:16px 18px 60px; align-items:start; }
+  @media(max-width:880px){ .board{ grid-template-columns:1fr; } }
+  .col{ background:var(--bg2); border:1px solid var(--line); border-radius:14px; padding:10px; min-height:120px; }
+  .col h2{ margin:2px 4px 10px; font-size:13px; text-transform:uppercase; letter-spacing:.06em; display:flex; align-items:center; gap:8px; color:var(--soft); }
+  .col h2 .pip{ width:9px; height:9px; border-radius:50%; }
+  .col.inbox h2 .pip{ background:var(--inbox); } .col.ready h2 .pip{ background:var(--ready); } .col.posted h2 .pip{ background:var(--posted); }
+  .col h2 .ct{ margin-left:auto; background:var(--card); border:1px solid var(--line); border-radius:999px; padding:1px 8px; font-size:11px; color:var(--soft); }
+  .card{ background:var(--card); border:1px solid var(--line); border-radius:12px; padding:11px 12px; margin-bottom:10px; box-shadow:0 1px 2px rgba(42,36,27,.04); }
+  .meta{ display:flex; flex-wrap:wrap; align-items:center; gap:6px; font-size:11.5px; color:var(--mut); margin-bottom:7px; }
+  .tag{ font-size:10.5px; font-weight:700; padding:2px 7px; border-radius:6px; text-transform:uppercase; letter-spacing:.03em; }
+  .tag.x{ background:#111; color:#fff; } .tag.reddit{ background:var(--reddit); color:#fff; }
+  .tag.type{ background:var(--bg2); color:var(--soft); }
+  .tag.in{ background:#EAD9F6; color:var(--grape); }
+  .meta a{ color:var(--grape); text-decoration:none; } .meta a:hover{ text-decoration:underline; }
+  .ctx{ font-size:12px; color:var(--soft); background:var(--bg2); border-left:3px solid var(--line); padding:5px 8px; border-radius:0 8px 8px 0; margin-bottom:7px; }
+  .ttl{ font-weight:600; margin-bottom:5px; }
+  textarea{ width:100%; border:1px solid var(--line); border-radius:8px; padding:8px; font:13px/1.4 inherit; color:var(--ink); background:#fffdf8; resize:vertical; min-height:54px; }
+  .note{ font-size:11px; color:var(--mut); margin-top:6px; font-style:italic; }
+  .row{ display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
+  button.act{ border:0; border-radius:8px; padding:6px 11px; font-size:12px; font-weight:600; cursor:pointer; background:var(--bg2); color:var(--ink); }
+  button.act.post{ background:var(--ink); color:var(--bg); } button.act.post.reddit{ background:var(--reddit); color:#fff; }
+  button.act.mv{ background:transparent; border:1px solid var(--line); color:var(--soft); }
+  button.act.go{ background:var(--ready); color:#fff; }
+  .empty{ font-size:12px; color:var(--mut); text-align:center; padding:18px 6px; }
+</style>
+</head>
+<body>
+<header>
+  <h1><span class="dot"></span> yolkling postboard <span style="font-size:12px;color:var(--mut);font-weight:400">draft &rarr; ready &rarr; posted</span></h1>
+  <div class="stats" id="stats"></div>
+  <div class="filters">
+    <button class="chip on" data-pf="all" onclick="setPF('all')">all</button>
+    <button class="chip" data-pf="x" onclick="setPF('x')">X</button>
+    <button class="chip" data-pf="reddit" onclick="setPF('reddit')">reddit</button>
+    <span style="width:10px"></span>
+    <button class="chip on" data-tf="all" onclick="setTF('all')">everything</button>
+    <button class="chip" data-tf="post" onclick="setTF('post')">posts</button>
+    <button class="chip" data-tf="reply" onclick="setTF('reply')">replies</button>
+    <button class="chip" data-tf="comment" onclick="setTF('comment')">comments</button>
+    <span style="width:10px"></span>
+    <button class="chip live" data-live onclick="toggleLive()">&#128308; live reddit targets <span id="n_live"></span></button>
+  </div>
+</header>
+
+<div class="board" id="board"></div>
+
+<script src="postboard-data.js"></script>
+<script>
+const ITEMS = (window.POSTBOARD_ITEMS||[]);
+let PF='all', TF='all', LIVE_ON=false;
+let LIVE=[], LIVE_LOADED=false, LIVE_LOADING=false;
+
+const SKEY='pb_status_v2';
+let STATUS = JSON.parse(localStorage.getItem(SKEY)||'{}');
+const saveStatus=()=>localStorage.setItem(SKEY,JSON.stringify(STATUS));
+const stOf=(id)=>STATUS[id]||'inbox';
+function setStatus(id,s){ STATUS[id]=s; saveStatus(); render(); }
+
+const EKEY='pb_edits_v2';
+let EDITS = JSON.parse(localStorage.getItem(EKEY)||'{}');
+function onEdit(id,el){ EDITS[id]=el.value; localStorage.setItem(EKEY,JSON.stringify(EDITS)); }
+const textOf=(it)=> (EDITS[it.id]!=null?EDITS[it.id]:(it.text||it.body||''));
+
+const esc=s=>(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const enc=encodeURIComponent;
+
+function typeOf(it){
+  if(it.type==='reddit_post'||it.type==='tweet') return 'post';
+  if(it.type==='reddit_comment') return 'comment';
+  return 'reply';
+}
+function matchFilters(it){
+  if(PF!=='all' && it.platform!==PF) return false;
+  if(TF!=='all' && typeOf(it)!==TF) return false;
+  return true;
+}
+
+function copyText(id,btn){
+  const t=document.getElementById('ta_'+id);
+  navigator.clipboard.writeText(t?t.value:'').then(()=>{const o=btn.textContent;btn.textContent='copied';setTimeout(()=>btn.textContent=o,1200);}).catch(()=>{});
+}
+function postReddit(id,sub,title){
+  const t=document.getElementById('ta_'+id);
+  if(t) navigator.clipboard.writeText(t.value).catch(()=>{});
+  window.open('https://www.reddit.com/r/'+enc(sub||'')+'/submit?title='+enc(title||''),'_blank');
+}
+function tweetIntent(id){
+  const t=document.getElementById('ta_'+id);
+  window.open('https://twitter.com/intent/tweet?text='+enc(t?t.value:''),'_blank');
+}
+
+function card(it){
+  const id=it.id, st=stOf(id), tp=typeOf(it);
+  const plat='<span class="tag '+it.platform+'">'+(it.platform==='x'?'X':'reddit')+'</span>';
+  const typ='<span class="tag type">'+tp+(it.sub?' &middot; r/'+esc(it.sub):'')+'</span>';
+  const inb= it.dir==='in' ? '<span class="tag in">they replied to you</span>' : '';
+  const who= it.target_who?('<span>'+esc(it.target_who)+'</span>'):'';
+  const open= it.target_url?(' <a href="'+esc(it.target_url)+'" target="_blank">open target &#8599;</a>'):'';
+  const ctx= it.context?('<div class="ctx">"'+esc(it.context)+'"</div>'):'';
+  const ttl= it.title?('<div class="ttl">'+esc(it.title)+'</div>'):'';
+  const note= it.note?('<div class="note">'+esc(it.note)+'</div>'):'';
+
+  let go='';
+  if(it.type==='reddit_post') go='<button class="act post reddit" onclick="postReddit(\''+id+'\',\''+esc(it.sub)+'\',\''+esc((it.title||'').replace(/\'/g,"\\\'"))+'\')">open reddit submit</button>';
+  else if(it.type==='tweet') go='<button class="act post" onclick="tweetIntent(\''+id+'\')">open tweet box</button>';
+  else if(it.target_url) go='<a href="'+esc(it.target_url)+'" target="_blank"><button class="act post '+(it.platform==='reddit'?'reddit':'')+'">open to '+(tp==='comment'?'comment':'reply')+'</button></a>';
+
+  const stages=['inbox','ready','posted'];
+  const i=stages.indexOf(st);
+  const back= i>0?'<button class="act mv" onclick="setStatus(\''+id+'\',\''+stages[i-1]+'\')">&larr; '+stages[i-1]+'</button>':'';
+  const fwd= i<2?'<button class="act go" onclick="setStatus(\''+id+'\',\''+stages[i+1]+'\')">'+(stages[i+1]==='posted'?'mark posted':'&rarr; ready')+'</button>':'<button class="act mv" onclick="setStatus(\''+id+'\',\'inbox\')">&#8634; reopen</button>';
+
+  return '<div class="card"><div class="meta">'+plat+typ+inb+who+open+'</div>'+
+    ttl+ctx+
+    '<textarea id="ta_'+id+'" oninput="onEdit(\''+id+'\',this)">'+esc(textOf(it))+'</textarea>'+note+
+    '<div class="row"><button class="act" onclick="copyText(\''+id+'\',this)">copy</button>'+go+back+fwd+'</div></div>';
+}
+
+function liveCard(t){
+  const id='live_'+t.id;
+  return '<div class="card"><div class="meta"><span class="tag reddit">reddit</span><span class="tag type">live &middot; r/'+esc(t.subreddit)+'</span>'+
+    '<span>u/'+esc(t.author)+'</span><span>&#8593;'+t.score+'</span><span>&#128172;'+t.comments+'</span><span>'+t.ageHrs+'h</span>'+
+    ' <a href="'+esc(t.permalink)+'" target="_blank">open &#8599;</a></div>'+
+    '<div class="ttl">'+esc(t.title)+'</div>'+
+    '<textarea id="ta_'+id+'" placeholder="draft a short, human one-line reply..." oninput="onEdit(\''+id+'\',this)">'+esc(EDITS[id]||'')+'</textarea>'+
+    '<div class="row"><button class="act" onclick="copyText(\''+id+'\',this)">copy</button>'+
+    '<a href="'+esc(t.permalink)+'" target="_blank"><button class="act post reddit">open to reply</button></a>'+
+    '<button class="act go" onclick="setStatus(\''+id+'\',\'posted\')">mark posted</button></div></div>';
+}
+
+async function loadLive(){
+  if(LIVE_LOADING) return; LIVE_LOADING=true; document.getElementById('n_live').textContent='...';
+  try{ const r=await fetch('/api/reddit-targets'); const j=await r.json(); LIVE=j.targets||[]; }
+  catch(e){ LIVE=[]; }
+  LIVE_LOADED=true; LIVE_LOADING=false; render();
+}
+function toggleLive(){ LIVE_ON=!LIVE_ON; document.querySelector('[data-live]').classList.toggle('on',LIVE_ON); if(LIVE_ON&&!LIVE_LOADED) loadLive(); render(); }
+function setPF(f){ PF=f; document.querySelectorAll('[data-pf]').forEach(b=>b.classList.toggle('on',b.dataset.pf===f)); render(); }
+function setTF(f){ TF=f; document.querySelectorAll('[data-tf]').forEach(b=>b.classList.toggle('on',b.dataset.tf===f)); render(); }
+
+function render(){
+  const vis=ITEMS.filter(matchFilters);
+  const cols={inbox:[],ready:[],posted:[]};
+  vis.forEach(it=>cols[stOf(it.id)].push(it));
+  if(LIVE_ON && (PF==='all'||PF==='reddit') && (TF==='all'||TF==='reply'||TF==='comment')){
+    LIVE.forEach(t=>{ const id='live_'+t.id; (stOf(id)==='posted'?cols.posted:cols.inbox).push({__live:t}); });
+  }
+  const all=ITEMS.length, x=ITEMS.filter(i=>i.platform==='x').length, rd=ITEMS.filter(i=>i.platform==='reddit').length;
+  const posted=ITEMS.filter(i=>stOf(i.id)==='posted').length, ready=ITEMS.filter(i=>stOf(i.id)==='ready').length;
+  const posts=ITEMS.filter(i=>typeOf(i)==='post').length, replies=ITEMS.filter(i=>typeOf(i)==='reply').length, comments=ITEMS.filter(i=>typeOf(i)==='comment').length;
+  document.getElementById('stats').innerHTML=
+    '<span class="stat"><b>'+all+'</b> drafted</span>'+
+    '<span class="stat"><b>'+ready+'</b> ready</span>'+
+    '<span class="stat"><b>'+posted+'</b> posted</span>'+
+    '<span class="stat x"><b>'+x+'</b> X</span>'+
+    '<span class="stat reddit"><b>'+rd+'</b> reddit</span>'+
+    '<span class="stat"><b>'+posts+'</b> posts &middot; <b>'+replies+'</b> replies &middot; <b>'+comments+'</b> comments</span>';
+  document.getElementById('n_live').textContent = LIVE_LOADED ? (LIVE.filter(t=>stOf('live_'+t.id)!=='posted').length||'') : '';
+
+  const colHtml=(key,label)=>{
+    const arr=cols[key];
+    const body=arr.length? arr.map(x=>x.__live?liveCard(x.__live):card(x)).join('') : '<div class="empty">nothing here</div>';
+    return '<div class="col '+key+'"><h2><span class="pip"></span>'+label+'<span class="ct">'+arr.length+'</span></h2>'+body+'</div>';
+  };
+  document.getElementById('board').innerHTML =
+    colHtml('inbox','inbox &middot; to review')+colHtml('ready','ready to post')+colHtml('posted','posted');
+}
+render();
+</script>
+</body>
+</html>

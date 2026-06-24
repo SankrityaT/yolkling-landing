@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>yolkling postboard</title>
+<style>
+  :root { --bg:#FBF6EC; --bg2:#F4EAD6; --ink:#2A241B; --soft:#6E5C49; --mut:#A8937D; --yolk:#FFC23B; --yolkd:#E8A21E; --grape:#7B5CF0; --line:rgba(42,36,27,.14); }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--ink); font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif; line-height:1.5; padding:28px 18px 80px; }
+  .wrap { max-width:760px; margin:0 auto; }
+  h1 { font-size:1.9rem; letter-spacing:-.02em; display:flex; align-items:center; gap:.5rem; }
+  .dot { width:18px; height:18px; border-radius:50%; background:var(--yolk); box-shadow:inset -3px -3px 0 rgba(0,0,0,.15); }
+  .sub { color:var(--soft); margin:.4rem 0 1.6rem; font-size:.98rem; }
+  .how { background:var(--bg2); border:1.5px solid var(--line); border-radius:14px; padding:.9rem 1.1rem; font-size:.9rem; color:var(--soft); margin-bottom:1.8rem; }
+  .how b { color:var(--ink); }
+  h2 { font-size:.78rem; text-transform:uppercase; letter-spacing:.08em; color:var(--mut); margin:2rem 0 .8rem; }
+  .card { background:#fff; border:1.5px solid var(--line); border-radius:18px; padding:1rem 1.1rem; margin-bottom:1rem; }
+  .meta { font-size:.78rem; color:var(--mut); margin-bottom:.55rem; display:flex; gap:.5rem; flex-wrap:wrap; align-items:center; }
+  .meta a { color:var(--grape); }
+  textarea { width:100%; border:1.5px solid var(--line); border-radius:12px; padding:.7rem .85rem; font:inherit; font-size:.98rem; resize:vertical; background:#fff; color:var(--ink); min-height:84px; outline:none; }
+  textarea:focus { border-color:var(--ink); }
+  .row { display:flex; gap:.5rem; margin-top:.6rem; flex-wrap:wrap; align-items:center; }
+  button { font:inherit; font-weight:600; font-size:.92rem; border:none; border-radius:100px; padding:.55rem 1.1rem; cursor:pointer; transition:transform .12s; }
+  button:active { transform:translateY(1px); }
+  .post { background:var(--ink); color:var(--bg); }
+  .post.x { background:#111; }
+  .post.reddit { background:#FF4500; color:#fff; }
+  .copy { background:var(--bg2); color:var(--ink); border:1.5px solid var(--line); }
+  .count { font-size:.78rem; color:var(--mut); margin-left:auto; }
+  .count.over { color:#c4502e; }
+  input.title { width:100%; border:1.5px solid var(--line); border-radius:12px; padding:.6rem .85rem; font:inherit; font-weight:600; margin-bottom:.5rem; outline:none; }
+  .note { font-size:.8rem; color:var(--mut); margin-top:.4rem; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1><span class="dot"></span> yolkling postboard</h1>
+  <p class="sub">review each one, edit if you want, then hit post. it opens the tweet or reddit submit pre-filled so you make the actual post yourself. nothing is automated, nothing posts without you.</p>
+  <div class="how"><b>how it works:</b> click <b>post on X</b> or <b>post on reddit</b> and it opens the platform with the text filled in. you read it once more and hit the real post button there. for reddit comments, hit <b>copy</b>, open the thread, paste. no em dashes anywhere, all written in your voice.</div>
+
+  <h2>tweets, ready to fire (space them out, ~1 a day)</h2>
+  <div id="tweets"></div>
+
+  <h2>the invited reply (someone asked for startup links)</h2>
+  <div id="replies"></div>
+
+  <h2>reddit: your one r/SideProject post (read the sidebar rules first, reply to every comment)</h2>
+  <div id="reddit"></div>
+
+  <h2>genuine comments to copy (be supportive first, rewrite to the actual post, mention yolkling only if it truly fits)</h2>
+  <div id="comments"></div>
+
+  <h2>compose your own</h2>
+  <div class="card">
+    <textarea id="customX" placeholder="write anything, then post it"></textarea>
+    <div class="row">
+      <button class="post x" onclick="postX('customX')">post on X</button>
+      <button class="copy" onclick="copyId('customX')">copy</button>
+      <span class="count" id="customX_c"></span>
+    </div>
+  </div>
+</div>
+
+<script>
+const TWEETS = [
+  "day one of yolkling being real on the internet. a little creature that grows when you take care of yourself and gets sleepy when you doomscroll. the weird part of building it was making something that genuinely wants you to close the app.",
+  "i can't draw, so every yolkling is built from simple shapes in code. a handful of parts makes millions of unique ones. constraints are a gift honestly.",
+  "someone asked why an app would want you off your phone. because every other app wants the opposite. your little guy lights up when you go outside. that's the whole pitch.",
+  "if you invite a friend to yolkling you both get a founding-flock creature. only exists while we're tiny, never sold later. the early people should get something the latecomers can't buy."
+];
+
+const REPLIES = [
+  { url:"https://x.com/ionleu/status/2067132132108255702", who:"@ionleu, 'drop ur startup link'", id:"2067132132108255702",
+    text:"a one of a kind creature you hatch from your vibe. it grows when you look after yourself and gets sleepy when you doomscroll. basically an app that wants you off your phone. ios, waitlist's at yolkling.com 🥚" }
+];
+
+const REDDIT_POST = {
+  sub:"SideProject",
+  title:"i built a little creature that grows when you take care of yourself and gets sleepy when you doomscroll",
+  body:`hey guys. i've been building this thing called yolkling. it's a tiny one of a kind creature (picture a little yolk with a face) that you hatch, and it grows when you do normal human stuff like sleep, drink water, get some sunlight, text people back. when you doomscroll it gets sleepy. so it's basically an app that is rooting for you to put your phone down, which is a weird thing to build but i kept wanting it to exist.
+
+they're all unique, no two look the same, and they're social. your creature visits your friends' creatures and leaves little postcards. building that part was the most fun i've had on this.
+
+i'm one person doing this. i'm not trying to make a lot of money, just enough that i'm not paying out of pocket for infra. it'll be free to hatch always, and the only money is cheap optional cosmetics.
+
+it's ios first for now. there's a waitlist up if you want to see how it turns out, i won't bug you, it's literally just the release announcement. landing page is yolkling.com.
+
+mostly i'd love feedback on the concept and the landing page ui. and genuinely curious: what feature would make you or someone you know actually pay a few bucks for a thing like this?`
+};
+
+const COMMENTS = [
+  { use:"on a cozy/pet app or game launch", text:"oh this is lovely, congrats on shipping. how long did the art take you? working on a little creature thing myself and the animation pass is eating me alive." },
+  { use:"on a 'what should i build / feedback' post", text:"for what it's worth the thing that hooks me is when the character actually reacts to me, not just a number going up. tiny reactions go a long way." },
+  { use:"on a digital minimalism / screen time post", text:"this resonates. the thing that finally helped me wasn't a blocker app, it was having a small reason to look forward to not being on my phone." },
+  { use:"on a solo founder venting about infra cost", text:"felt this. building solo and just trying to break even on servers, the 'i don't need to get rich, just not pay out of pocket' mindset honestly made it more fun." },
+  { use:"pure support, no mention of your app, use this most", text:"this is genuinely great. saving it. rooting for you." }
+];
+
+function esc(s){ const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+function card(inner){ const d=document.createElement('div'); d.className='card'; d.innerHTML=inner; return d; }
+function tid(){ return 't'+Math.floor(Math.random()*1e9); }
+
+function countFor(id){
+  const ta=document.getElementById(id); const c=document.getElementById(id+'_c'); if(!ta||!c) return;
+  const n=ta.value.length; c.textContent=n+' chars'; c.className='count'+(n>280?' over':'');
+}
+function postX(id, replyTo){
+  const ta=document.getElementById(id); let url='https://x.com/intent/tweet?text='+encodeURIComponent(ta.value);
+  if(replyTo) url+='&in_reply_to='+replyTo;
+  window.open(url,'_blank');
+}
+function copyId(id){ const ta=document.getElementById(id); navigator.clipboard.writeText(ta.value); flash(id); }
+function copyText(t,btn){ navigator.clipboard.writeText(t); btn.textContent='copied'; setTimeout(()=>btn.textContent='copy',1200); }
+function flash(id){ const c=document.getElementById(id+'_c'); if(c){ const o=c.textContent; c.textContent='copied'; setTimeout(()=>countFor(id),1200);} }
+function submitReddit(sub,titleId,bodyId){
+  const title=document.getElementById(titleId).value, body=document.getElementById(bodyId).value;
+  const url='https://www.reddit.com/r/'+sub+'/submit?title='+encodeURIComponent(title)+'&text='+encodeURIComponent(body);
+  window.open(url,'_blank');
+}
+
+// tweets
+const tw=document.getElementById('tweets');
+TWEETS.forEach(t=>{ const id=tid();
+  tw.appendChild(card(
+    `<textarea id="${id}" oninput="countFor('${id}')">${esc(t)}</textarea>
+     <div class="row"><button class="post x" onclick="postX('${id}')">post on X</button>
+     <button class="copy" onclick="copyId('${id}')">copy</button>
+     <span class="count" id="${id}_c"></span></div>`)); countFor(id); });
+
+// replies
+const rp=document.getElementById('replies');
+REPLIES.forEach(r=>{ const id=tid();
+  rp.appendChild(card(
+    `<div class="meta">replying to <a href="${r.url}" target="_blank">${esc(r.who)}</a></div>
+     <textarea id="${id}" oninput="countFor('${id}')">${esc(r.text)}</textarea>
+     <div class="row"><button class="post x" onclick="postX('${id}','${r.id}')">post reply on X</button>
+     <button class="copy" onclick="copyId('${id}')">copy</button>
+     <a href="${r.url}" target="_blank"><button class="copy">open thread</button></a>
+     <span class="count" id="${id}_c"></span></div>
+     <div class="note">if the reply box doesn't pre-fill, hit copy + open thread and paste.</div>`)); countFor(id); });
+
+// reddit
+const rd=document.getElementById('reddit');
+{ const tt=tid(), bb=tid();
+  rd.appendChild(card(
+    `<div class="meta">r/${REDDIT_POST.sub}</div>
+     <input class="title" id="${tt}" value="${esc(REDDIT_POST.title)}" />
+     <textarea id="${bb}" style="min-height:200px">${esc(REDDIT_POST.body)}</textarea>
+     <div class="row"><button class="post reddit" onclick="submitReddit('${REDDIT_POST.sub}','${tt}','${bb}')">post on reddit</button>
+     <button class="copy" onclick="copyId('${bb}')">copy body</button></div>
+     <div class="note">new reddit sometimes ignores the pre-filled body, if so the title fills in and you paste the body. read the subreddit rules before posting.</div>`)); }
+
+// comments
+const cm=document.getElementById('comments');
+COMMENTS.forEach(c=>{
+  const d=document.createElement('div'); d.className='card';
+  d.innerHTML=`<div class="meta">${esc(c.use)}</div><div style="font-size:.98rem">${esc(c.text)}</div>
+    <div class="row"><button class="copy" onclick="copyText(${JSON.stringify(c.text)},this)">copy</button></div>`;
+  cm.appendChild(d);
+});
+countFor('customX');
+document.getElementById('customX').addEventListener('input',()=>countFor('customX'));
+</script>
+</body>
+</html>
