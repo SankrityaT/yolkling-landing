@@ -125,7 +125,7 @@ export const BODY = `
           <h3 class="card-h">tell it<br/>your vibe</h3>
           <p class="card-p">choose your colours, its look, its little quirks. a few taps and out comes a creature that knows the shape of you.</p>
         </div>
-        <div class="card-shot"><img src="/shots/vibe.png" alt="make your yolkling: pick its colour and look" loading="lazy"/></div>
+        <div class="card-shot"><img src="/shots/vibe.png" alt="choose your yolk's colours, outfits and look" loading="lazy"/></div>
       </div></div>
       <div class="card" id="card-2"><div class="card-inner">
         <div class="card-text">
