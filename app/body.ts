@@ -46,7 +46,7 @@ export const BODY = `
         <span class="line-mask"><span class="line">little guy</span></span>
         <span class="line-mask"><span class="line">who's <span class="wob">you.</span></span></span>
       </h1>
-      <p class="hero-sub">hatch a one of a kind creature from your vibe. it earns your trust and grows every time you take care of yourself, and your creatures visit each other's little rooms.</p>
+      <p class="hero-sub">he hatches in a few taps, then grows from how you actually live. sleep well, move more, put the phone down, and watch him light up.</p>
       <form class="waitlist" id="waitlist" novalidate>
         <input type="email" id="wlEmail" class="wl-input" placeholder="you@email.com" autocomplete="email" required />
         <button type="submit" class="btn-primary" data-magnetic data-cursor="join"><span>Join the waitlist</span><i>→</i></button>
@@ -60,6 +60,8 @@ export const BODY = `
     </div>
     <div class="stage" id="stage">
       <div class="creature" id="creature">
+        <div class="cr-glow" aria-hidden="true"></div>
+        <div class="cr-zzz" aria-hidden="true"><span>z</span><span>z</span><span>z</span></div>
         <div class="cr-arm cr-arm-l"></div>
         <div class="cr-arm cr-arm-r"></div>
         <div class="cr-body">
@@ -74,7 +76,14 @@ export const BODY = `
       </div>
       <div class="cr-shadow" id="crShadow"></div>
       <div class="stage-controls">
-        <span class="stage-hint mono">drag him, or re-hatch a vibe ↓</span>
+        <div class="day-demo" id="dayDemo">
+          <span class="day-q mono">last night i…</span>
+          <div class="day-opts">
+            <button class="day-opt" data-day="rough" data-cursor="">slept rough</button>
+            <button class="day-opt" data-day="good" data-cursor="">slept great</button>
+          </div>
+          <span class="day-say mono" id="daySay">tap one, watch him feel it ↑</span>
+        </div>
         <div class="vibe-picker" id="vibePicker">
           <button class="vibe is-on" data-vibe="yolk" style="--v:#FFC23B" aria-label="yolk"></button>
           <button class="vibe" data-vibe="chill" style="--v:#8FD0FF" aria-label="chill"></button>
@@ -243,7 +252,7 @@ export const BODY = `
     <div class="footer">
       <div class="footer-col"><span class="brand">yolkling</span><p class="mono">the little guy who's secretly you.</p></div>
       <div class="footer-col mono"><a href="#hatch">Hatch</a><a href="#how">How</a><a href="#collection">Creatures</a><a href="#feedback">Say hi</a></div>
-      <div class="footer-col mono"><a href="/privacy">privacy</a><a href="/terms">terms</a><a href="#feedback">say hi</a></div>
+      <div class="footer-col mono"><a href="/support">support</a><a href="/privacy">privacy</a><a href="/terms">terms</a><a href="#feedback">say hi</a></div>
       <div class="footer-col mono footer-status"><p class="live">● <span id="footLive">early access is open</span></p><p>made by one person, with snacks and feelings</p><p>© 2026, please drink water</p></div>
     </div>
   </footer>

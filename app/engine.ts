@@ -59,10 +59,11 @@ export function bootYolkling() {
     const shadow = document.getElementById("crShadow");
     const pupils = cr.querySelectorAll(".cr-pupil");
     const arms = cr.querySelectorAll(".cr-arm");
-    gsap.to(body, { scaleX: 1.04, scaleY: 0.96, duration: 1.4, ease: "sine.inOut", yoyo: true, repeat: -1, transformOrigin: "50% 100%" });
+    const breathe = gsap.to(body, { scaleX: 1.04, scaleY: 0.96, duration: 1.4, ease: "sine.inOut", yoyo: true, repeat: -1, transformOrigin: "50% 100%" });
     arms.forEach((a, i) => gsap.to(a, { rotation: i ? 14 : -14, duration: 1.1, ease: "sine.inOut", yoyo: true, repeat: -1, delay: i * 0.2 }));
     const eyes = cr.querySelectorAll(".cr-eye");
-    function blink() { gsap.to(eyes, { scaleY: 0.12, duration: 0.07, yoyo: true, repeat: 1, transformOrigin: "50% 50%" }); gsap.delayedCall(2 + Math.random() * 3.5, blink); }
+    let blinkOn = true;
+    function blink() { if (blinkOn) gsap.to(eyes, { scaleY: 0.12, duration: 0.07, yoyo: true, repeat: 1, transformOrigin: "50% 50%" }); gsap.delayedCall(2 + Math.random() * 3.5, blink); }
     gsap.delayedCall(2, blink);
     const pq = [...pupils].map((p) => ({ x: gsap.quickTo(p, "x", { duration: 0.25, ease: "power3" }), y: gsap.quickTo(p, "y", { duration: 0.25, ease: "power3" }), el: p }));
     const lookX = gsap.quickTo(cr, "x", { duration: 0.5, ease: "power3" });
@@ -134,6 +135,7 @@ export function bootYolkling() {
       const v = VIBES[name]; if (!v) return;
       Object.keys(VIBES).forEach((m) => cr.classList.remove("vibe-" + m));
       cr.classList.add("vibe-" + name);
+      cr.style.setProperty("--cv", v.c);
       document.querySelectorAll(".vibe").forEach((b) => b.classList.toggle("is-on", b === btn));
       gsap.to(body, { backgroundColor: v.c, duration: 0.5, ease: "power2.out" });
       gsap.to(arms, { backgroundColor: v.c, duration: 0.5 });
@@ -143,6 +145,37 @@ export function bootYolkling() {
       gsap.fromTo(vibeSay, { opacity: 0, y: 6 }, { opacity: 1, y: 0, duration: 0.4 });
     }
     document.querySelectorAll(".vibe").forEach((b) => b.addEventListener("click", () => setVibe((b as any).dataset.vibe, b)));
+
+    // how'd you sleep? — show the creature actually reacting to a good vs rough night
+    cr.style.setProperty("--cv", "#FFC23B");
+    const daySay = document.getElementById("daySay");
+    let dayState: string | null = null;
+    function setDay(state, btn) {
+      if (state === dayState) return;
+      dayState = state;
+      document.querySelectorAll(".day-opt").forEach((b) => b.classList.toggle("is-on", b === btn));
+      cr.classList.toggle("state-good", state === "good");
+      cr.classList.toggle("state-rough", state === "rough");
+      if (state === "good") {
+        blinkOn = true;
+        cr.classList.add("happy");
+        gsap.to(body, { filter: "saturate(1.14) brightness(1.05)", duration: 0.5 });
+        gsap.to(eyes, { scaleY: 1, duration: 0.3, transformOrigin: "50% 50%" });
+        breathe.timeScale(1.5);
+        if (mode === "idle") gsap.fromTo(cr, { y: 0 }, { y: -24, duration: 0.34, ease: "pop", yoyo: true, repeat: 1 });
+        spawnHearts(5);
+        daySay.textContent = "thriving. he trusts you a little more ♥";
+      } else {
+        blinkOn = false;
+        cr.classList.remove("happy");
+        gsap.killTweensOf(eyes);
+        gsap.to(body, { filter: "saturate(.9) brightness(.93)", duration: 0.5 });
+        gsap.to(eyes, { scaleY: 0.4, duration: 0.4, transformOrigin: "50% 62%" });
+        breathe.timeScale(0.6);
+        daySay.textContent = "sleepy, never sad. he just waits for you.";
+      }
+    }
+    document.querySelectorAll(".day-opt").forEach((b) => b.addEventListener("click", () => setDay((b as any).dataset.day, b)));
     (function antics() {
       gsap.delayedCall(5 + Math.random() * 6, () => {
         if (mode === "idle") {
