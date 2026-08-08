@@ -193,7 +193,7 @@ export const BODY = `
       <h2 class="big-h">a little shop of hats,<br/>rooms and rare colours.</h2>
       <p class="store-lead">your yolkling earns coins just by you living well. sleep, water, sunlight, showing up. spend them on outfits, tiny rooms and seasonal looks. that is the free way, and it is the main way.</p>
       <div class="store-grid">
-        <div class="store-card"><span class="store-chip" style="--c:#FF94C2"></span><h3>outfits and hats</h3><p>dress your little guy, mix and match, collect, and trade your spare ones with friends.</p></div>
+        <div class="store-card"><span class="store-chip" style="--c:#FF94C2"></span><h3>outfits and hats</h3><p>dress your little guy, mix and match, and swap a spare with a friend. both of you have to say yes.</p></div>
         <div class="store-card"><span class="store-chip" style="--c:#8FD0FF"></span><h3>little rooms</h3><p>give them a cosy home to decorate, and to show off when a friend's yolkling comes to visit.</p></div>
         <div class="store-card"><span class="store-chip" style="--c:#73E0AE"></span><h3>rare and seasonal</h3><p>colours and species that only appear for a while. earn them, or chip in a couple bucks to grab one.</p></div>
       </div>
@@ -232,13 +232,13 @@ export const BODY = `
         <div class="plan-badge mono">SUPPORTER</div>
         <div class="plan-top"><span class="mono">YOLKLING+</span><span class="plan-price">a few $</span></div>
         <p class="plan-desc">only if you love it. it just keeps the servers on, that's the whole business.</p>
-        <ul class="plan-list mono"><li>extra creatures</li><li>outfits, rooms and colours</li><li>seasonal species</li><li>cloud backup, it can't truly die</li></ul>
+        <ul class="plan-list mono"><li>a supporter glow</li><li>a handful of yolks each month</li><li>every season, included</li></ul>
         <a href="#top" class="plan-btn plan-btn-feat" data-magnetic data-cursor="join">join the list</a>
       </article>
       <article class="plan">
         <div class="plan-top"><span class="mono">FRIENDS</span><span class="plan-price">free</span></div>
         <p class="plan-desc">add the people you like. your creatures visit, leave gifts, and bring back postcards.</p>
-        <ul class="plan-list mono"><li>shared little village</li><li>trade and gift cosmetics</li><li>it remembers everyone</li></ul>
+        <ul class="plan-list mono"><li>shared little village</li><li>swap cosmetics, gift yolks</li><li>it remembers everyone</li></ul>
         <a href="#top" class="plan-btn" data-magnetic data-cursor="join">join the list</a>
       </article>
     </div>
