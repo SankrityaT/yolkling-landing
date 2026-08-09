@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local outreach automation state
+outreach-agent/state/
+outreach-agent/logs/
+outreach-agent/browser-profile/
+outreach-agent/chrome-profile/

@@ -370,6 +370,23 @@ export function bootYolkling() {
     gsap.utils.toArray(".plan").forEach((p, i) => gsap.from(p, { y: 60, opacity: 0, duration: 0.7, delay: i * 0.08, ease: "pop", scrollTrigger: { trigger: ".plans", start: "top 82%" } }));
   }
 
+  /* ---------- utm capture (for the ad-ops attribution) ---------- */
+  const UTM_KEYS = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"];
+  function captureUtm() {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const found = {};
+      let any = false;
+      UTM_KEYS.forEach((k) => { const v = params.get(k); if (v) { found[k] = v.slice(0, 100); any = true; } });
+      // a fresh ad click replaces whatever attribution was stored before; an organic
+      // visit with no utm params leaves prior ad attribution alone.
+      if (any) localStorage.setItem("yolk_utm", JSON.stringify(found));
+    } catch {}
+  }
+  function getStoredUtm() {
+    try { return JSON.parse(localStorage.getItem("yolk_utm") || "{}"); } catch { return {}; }
+  }
+
   /* ---------- real waitlist count ---------- */
   function loadCount() {
     fetch("/api/waitlist").then((r) => r.json()).then((d) => {
@@ -393,7 +410,7 @@ export function bootYolkling() {
       const email = input.value.trim();
       if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { input.style.borderColor = "#d4502e"; return; }
       let status = "ok";
-      try { const r = await fetch("/api/waitlist", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email }) }); const j = await r.json(); status = (j && j.status) || "ok"; } catch {}
+      try { const r = await fetch("/api/waitlist", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email, ...getStoredUtm() }) }); const j = await r.json(); status = (j && j.status) || "ok"; } catch {}
       wlForm.style.display = "none";
       const meta = document.querySelector(".wl-meta") as HTMLElement; if (meta) meta.style.display = "none";
       const done = document.getElementById("wlDone");
@@ -422,6 +439,7 @@ export function bootYolkling() {
     });
   }
 
+  captureUtm();
   runPreloader();
   initCursor();
   initMarquee();

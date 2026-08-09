@@ -19,15 +19,24 @@ function sb(path: string, init: RequestInit = {}) {
   });
 }
 
+export interface UtmParams {
+  utm_source?: string;
+  utm_medium?: string;
+  utm_campaign?: string;
+  utm_content?: string;
+  utm_term?: string;
+}
+
 export async function insertWaitlist(
   email: string,
+  utm: UtmParams = {},
 ): Promise<{ status: "ok" | "dup" | "skip"; code?: string }> {
   if (!SUPABASE_URL || !SUPABASE_KEY) return { status: "skip" };
   // return=representation so we get the founder code the DB trigger generated.
   const res = await sb("waitlist", {
     method: "POST",
     headers: { Prefer: "resolution=ignore-duplicates,return=representation" },
-    body: JSON.stringify({ email: email.toLowerCase().trim() }),
+    body: JSON.stringify({ email: email.toLowerCase().trim(), ...utm }),
   });
   if (!res.ok) return { status: "skip" };
   const rows = await res.json().catch(() => []);
