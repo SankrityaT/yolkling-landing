@@ -1,9 +1,13 @@
 // Supabase Edge Function, scheduled by pg_cron (see docs/sql/ads-cron-schedule.sql).
-// Runs on Deno, not Node, so this is a self-contained port of the polling logic in
-// app/api/ads/cron/route.ts, not a shared import. Its job: poll spend for active
+// Runs on Deno, not Node, so this duplicates the Meta/Google spend-fetch logic from
+// app/lib/ads/platforms/* rather than importing it. Its job: poll spend for active
 // campaigns, write a snapshot, and if the observed lifetime total crosses the cap,
 // call the app's own kill-switch endpoint (mutation logic stays in one place, the
 // Next.js app, this function only reads platform spend and reports it).
+//
+// Deployed with --no-verify-jwt: pg_net authenticates with ADS_API_KEY, not a
+// Supabase-issued JWT, so platform-level JWT verification is off on purpose and
+// the check below is the only thing guarding this endpoint.
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
@@ -92,10 +96,11 @@ async function getGoogleSpend(externalCampaignId: string) {
 }
 
 Deno.serve(async (req) => {
-  // pg_net calls this with the service role key as a bearer token (see the schedule
-  // SQL); reject anything else so this can't be triggered by a stray public request.
+  // pg_net calls this with ADS_API_KEY as a bearer token (see the schedule SQL) —
+  // the same shared secret the dashboard/API already use, not the Supabase service
+  // role key, so there's exactly one secret to keep in sync across the two projects.
   const auth = req.headers.get("authorization");
-  if (auth !== `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`) {
+  if (auth !== `Bearer ${ADS_API_KEY}`) {
     return new Response(JSON.stringify({ ok: false, error: "unauthorized" }), { status: 401 });
   }
 

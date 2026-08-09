@@ -1,19 +1,21 @@
 -- Schedules the ads-cron Edge Function via pg_cron + pg_net, every 30 minutes.
--- Run this once in the Supabase SQL editor, AFTER the edge function is deployed
--- (`supabase functions deploy ads-cron`) and its secrets are set.
+-- Run this once in the Supabase SQL editor, AFTER the edge function is deployed with
+-- `supabase functions deploy ads-cron --no-verify-jwt` (platform-level JWT
+-- verification is disabled on purpose: pg_net calls this with ADS_API_KEY as the
+-- bearer token, not a Supabase-issued JWT, and the function checks that itself).
 --
--- Uses Vault instead of pasting the service role key into the cron job definition
--- directly, so the key never sits in plaintext in cron.job.
+-- Uses Vault instead of pasting the key into the cron job definition directly, so
+-- it never sits in plaintext in cron.job.
 
 create extension if not exists pg_cron with schema pg_catalog;
 create extension if not exists pg_net with schema extensions;
 
--- Run once by hand with your real service role key (Project Settings > API), then
--- never commit the substituted version of this line anywhere.
+-- Run once by hand with the real ADS_API_KEY value (same one the dashboard and the
+-- Next.js API routes use), then never commit the substituted version of this line.
 select vault.create_secret(
-  'PASTE_YOUR_SERVICE_ROLE_KEY_HERE',
-  'ads_cron_service_role_key',
-  'used by pg_net to call the ads-cron edge function'
+  'PASTE_YOUR_ADS_API_KEY_HERE',
+  'ads_cron_auth_key',
+  'ADS_API_KEY, used by pg_net to authenticate to the ads-cron edge function'
 );
 
 select cron.schedule(
@@ -25,7 +27,7 @@ select cron.schedule(
     headers := jsonb_build_object(
       'Content-Type', 'application/json',
       'Authorization', 'Bearer ' || (
-        select decrypted_secret from vault.decrypted_secrets where name = 'ads_cron_service_role_key'
+        select decrypted_secret from vault.decrypted_secrets where name = 'ads_cron_auth_key'
       )
     ),
     body := '{}'::jsonb
