@@ -72,7 +72,7 @@ async function getGoogleSpend(externalCampaignId: string) {
   const loginCustomerId = Deno.env.get("GOOGLE_ADS_LOGIN_CUSTOMER_ID");
   if (!customerId || !developerToken || !loginCustomerId) throw new Error("Google Ads env vars incomplete");
   const accessToken = await getGoogleAccessToken();
-  const res = await fetch(`https://googleads.googleapis.com/v17/customers/${customerId}/googleAds:search`, {
+  const res = await fetch(`https://googleads.googleapis.com/v21/customers/${customerId}/googleAds:search`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${accessToken}`,

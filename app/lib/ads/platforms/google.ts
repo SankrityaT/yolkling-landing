@@ -4,7 +4,11 @@
 // come once real keyword/copy decisions are made, not faked here. A campaign with no
 // ad group under it spends nothing.
 
-const API_VERSION = "v17";
+// Google Ads API versions sunset roughly every 6-9 months; v17 was already gone
+// (404) and v20 already blocked as of 2026-08. Confirmed v21 live via a real
+// listAccessibleCustomers call. Re-check this if createCampaign starts failing
+// with UNSUPPORTED_VERSION.
+const API_VERSION = "v21";
 
 function requireConfig() {
   const clientId = process.env.GOOGLE_ADS_CLIENT_ID;
