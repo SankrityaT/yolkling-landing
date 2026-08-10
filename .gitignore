@@ -45,3 +45,4 @@ outreach-agent/state/
 outreach-agent/logs/
 outreach-agent/browser-profile/
 outreach-agent/chrome-profile/
+supabase/.temp/

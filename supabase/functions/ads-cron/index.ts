@@ -144,7 +144,7 @@ Deno.serve(async (req) => {
   let killSwitchTriggered = false;
   if (totalSpentCents >= LIFETIME_SPEND_CENTS_CAP) {
     killSwitchTriggered = true;
-    await fetch(`${SITE_URL}/api/ads/kill-switch`, {
+    await fetch(`${SITE_URL}/api/ops/kill-switch`, {
       method: "POST",
       headers: { "x-ads-key": ADS_API_KEY },
     }).catch(() => {});
