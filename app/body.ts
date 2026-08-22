@@ -252,7 +252,7 @@ export const BODY = `
     <div class="footer">
       <div class="footer-col"><span class="brand">yolkling</span><p class="mono">the little guy who's secretly you.</p></div>
       <div class="footer-col mono"><a href="#hatch">Hatch</a><a href="#how">How</a><a href="#collection">Creatures</a><a href="#feedback">Say hi</a></div>
-      <div class="footer-col mono"><a href="/support">support</a><a href="/privacy">privacy</a><a href="/terms">terms</a><a href="#feedback">say hi</a></div>
+      <div class="footer-col mono"><a href="/support">support</a><a href="/press">press</a><a href="/privacy">privacy</a><a href="/terms">terms</a><a href="#feedback">say hi</a></div>
       <div class="footer-col mono footer-status"><p class="live">● <span id="footLive">early access is open</span></p><p>made by one person, with snacks and feelings</p><p>© 2026, please drink water</p></div>
     </div>
   </footer>
