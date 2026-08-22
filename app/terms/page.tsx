@@ -113,9 +113,10 @@ export default function TermsPage() {
         <p>
           yolkling is a cozy app where you hatch and look after a little virtual creature. right now
           it is pre launch, so all you can do is join a waitlist and send feedback. the app itself is
-          coming, ios first. it is free to hatch, with some optional, cheap cosmetics down the line.
-          this is a small project made by one person who just wants to cover the running costs, not
-          get rich.
+          coming, ios first, and it will be free to play, all of it: no ads, no subscriptions, no
+          in-app purchases. everything you can dress your creature up with is earned by taking care
+          of yourself, never bought. this is a small project made by one person who just wants to
+          cover the running costs, not get rich.
         </p>
 
         <h2>it is early, things will change</h2>
@@ -124,6 +125,14 @@ export default function TermsPage() {
           timelines, and how the app works can all change, and the launch date is a best guess, not a
           promise. we might even decide not to ship something. we will try to be upfront when that
           happens.
+        </p>
+
+        <h2>if that ever changes</h2>
+        <p>
+          right now there is nothing to buy in yolkling, on purpose. if we ever introduce an optional
+          paid feature down the line, we will update this page first to say exactly what it is, what
+          it costs, and how billing and cancellation work, before anyone can pay for anything. we
+          will never gate the core game, hatching, growing, or collecting, behind a paywall.
         </p>
 
         <h2>being decent about it</h2>
