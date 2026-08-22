@@ -60,6 +60,10 @@ a{color:inherit;text-decoration:none}
    ============================================================ */
 .page{position:relative;z-index:10;background:var(--bg)}
 .nav{position:fixed;top:0;left:0;width:100%;z-index:6000;display:flex;align-items:center;justify-content:space-between;padding:1.3rem clamp(1.2rem,4vw,3rem)}
+/* Belt-and-suspenders for a direct link (yolkling.com/#collection): the browser's own
+   initial jump, before any JS has run, respects this. The JS nav handler measures the
+   nav's real height and is authoritative once it runs. */
+#hatch,#how,#collection,#feedback{scroll-margin-top:96px}
 .nav-logo{display:flex;align-items:center;gap:.5rem;font-size:1.5rem}
 .dot-logo{width:16px;height:16px;background:var(--grape);border-radius:50%;box-shadow:inset -3px -3px 0 rgba(0,0,0,.15)}
 .nav-links{position:absolute;left:50%;transform:translateX(-50%);display:flex;gap:1.8rem}

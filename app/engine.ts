@@ -439,6 +439,48 @@ export function bootYolkling() {
     });
   }
 
+  /* ---------- NAV: every #section link scrolls to the right place, every time ----------
+     Two bugs this fixes: (1) nothing called lenis.scrollTo, so clicking a nav link fell
+     through to the browser's native instant jump, which fights Lenis's virtual scroll
+     position and settles somewhere wrong. (2) the nav is position:fixed, so even a
+     correct jump landed the section's heading underneath it — nothing accounted for the
+     nav's height as an offset. */
+  function initAnchorNav() {
+    const nav = document.querySelector(".nav") as HTMLElement | null;
+    const navOffset = () => (nav ? nav.getBoundingClientRect().height : 0) + 12;
+
+    function go(hash: string) {
+      if (hash === "#top" || hash === "#") {
+        lenis ? lenis.scrollTo(0, { duration: 1.1 }) : window.scrollTo({ top: 0, behavior: "smooth" });
+        return;
+      }
+      const target = document.getElementById(hash.slice(1));
+      if (!target) return;
+      if (lenis) {
+        lenis.scrollTo(target, { offset: -navOffset(), duration: 1.1 });
+      } else {
+        const top = target.getBoundingClientRect().top + window.scrollY - navOffset();
+        window.scrollTo({ top, behavior: "smooth" });
+      }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach((a) => {
+      a.addEventListener("click", (e) => {
+        const href = a.getAttribute("href");
+        if (!href || href.length < 2) return;
+        e.preventDefault();
+        go(href);
+        history.pushState(null, "", href);
+      });
+    });
+
+    // A direct link like yolkling.com/#collection: let layout/fonts settle, then land
+    // accurately instead of trusting the browser's un-offset native jump.
+    if (location.hash) {
+      requestAnimationFrame(() => requestAnimationFrame(() => go(location.hash)));
+    }
+  }
+
   captureUtm();
   runPreloader();
   initCursor();
@@ -452,6 +494,7 @@ export function bootYolkling() {
   initOutro();
   initHeadings();
   initForms();
+  initAnchorNav();
   loadCount();
   ScrollTrigger.refresh();
 }

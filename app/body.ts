@@ -230,9 +230,9 @@ export const BODY = `
       </article>
       <article class="plan plan-feat">
         <div class="plan-badge mono">SUPPORTER</div>
-        <div class="plan-top"><span class="mono">YOLKLING+</span><span class="plan-price">a few $</span></div>
-        <p class="plan-desc">only if you love it. it just keeps the servers on, that's the whole business.</p>
-        <ul class="plan-list mono"><li>a supporter glow</li><li>a handful of yolks each month</li><li>every season, included</li></ul>
+        <div class="plan-top"><span class="mono">YOLKLING+</span><span class="plan-price">$4.99/mo</span></div>
+        <p class="plan-desc">a founding price, for people who want to support it. it doesn't unlock anything you can't already earn.</p>
+        <ul class="plan-list mono"><li>a supporter glow</li><li>400 yolks a month</li><li>gates nothing, ever</li></ul>
         <a href="#top" class="plan-btn plan-btn-feat" data-magnetic data-cursor="join">join the list</a>
       </article>
       <article class="plan">
