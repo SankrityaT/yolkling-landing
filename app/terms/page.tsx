@@ -113,10 +113,9 @@ export default function TermsPage() {
         <p>
           yolkling is a cozy app where you hatch and look after a little virtual creature. right now
           it is pre launch, so all you can do is join a waitlist and send feedback. the app itself is
-          coming, ios first, and it will be free to play, all of it: no ads, no subscriptions, no
-          in-app purchases. everything you can dress your creature up with is earned by taking care
-          of yourself, never bought. this is a small project made by one person who just wants to
-          cover the running costs, not get rich.
+          coming, ios first. it is free to hatch, free to play, and free to keep, with one optional
+          subscription for people who want to support it. this is a small project made by one person
+          who just wants to cover the running costs, not get rich.
         </p>
 
         <h2>it is early, things will change</h2>
@@ -127,12 +126,31 @@ export default function TermsPage() {
           happens.
         </p>
 
-        <h2>if that ever changes</h2>
+        <h2>yolkling plus</h2>
         <p>
-          right now there is nothing to buy in yolkling, on purpose. if we ever introduce an optional
-          paid feature down the line, we will update this page first to say exactly what it is, what
-          it costs, and how billing and cancellation work, before anyone can pay for anything. we
-          will never gate the core game, hatching, growing, or collecting, behind a paywall.
+          yolkling plus is an optional, auto-renewing subscription, currently $4.99 a month as a
+          founding price (an annual plan may come later). payment is charged to your apple account
+          when you confirm the purchase, and it renews automatically unless you cancel at least 24
+          hours before the end of the current period; renewal is charged within 24 hours of that
+          period ending. you can manage or cancel it any time in your apple account settings, and
+          cancelling stops the next renewal, not the period you already paid for.
+        </p>
+        <p>
+          on price. the price is always shown in the app before you buy anything, and prices can
+          change. the founding price is not guaranteed to last forever. if we ever raise the price on
+          a subscription you already have, apple will ask you to agree first, and if you do not
+          agree it simply will not renew at the new price. you will never be charged more without
+          saying yes.
+        </p>
+        <p>
+          refunds go through apple, not us, under apple&apos;s media services terms. we cannot
+          process them ourselves even when we would like to.
+        </p>
+        <p>
+          what plus does not do. it does not gate the game. every species, every cosmetic, every
+          feature is reachable without paying. plus adds a supporter glow on your creature and a
+          monthly stipend of 400 yolks, and that is genuinely it. yolks themselves are never sold
+          outside that stipend, there are no loot boxes, and money never touches anything random.
         </p>
 
         <h2>being decent about it</h2>
