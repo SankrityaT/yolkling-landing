@@ -245,6 +245,7 @@ a{color:inherit;text-decoration:none}
 .stmt-reveal .mono{color:var(--ink-soft)}
 .stmt-reveal h3{font-family:"Onest",sans-serif;font-weight:700;font-size:clamp(1.4rem,3.4vw,2.6rem);line-height:1.05;letter-spacing:-.02em}
 .stmt-reveal .wob3{color:var(--grape)}
+.stmt-sub{color:var(--ink-soft);font-size:clamp(.95rem,1.4vw,1.12rem);line-height:1.6;max-width:56ch}
 
 /* ============================================================
    FRIENDS (matter ball pit)

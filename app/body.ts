@@ -178,6 +178,7 @@ export const BODY = `
       <div class="stmt-reveal">
         <p class="mono">[ 03 / the twist ]</p>
         <h3>the only app on earth that wants you<br/>to <span class="wob3">put your phone down.</span></h3>
+        <p class="stmt-sub">scroll all night and he just gets sleepy, and waits for you.<br/>no sickness, no streak funerals, no guilt. miss a week and coming back feels like coming home.</p>
       </div>
     </div>
   </section>
