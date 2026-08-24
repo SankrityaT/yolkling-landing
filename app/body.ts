@@ -42,11 +42,10 @@ export const BODY = `
     <div class="hero-text">
       <p class="hero-eyebrow mono"><span class="pip"></span> a little creature, secretly you</p>
       <h1 class="hero-h1">
-        <span class="line-mask"><span class="line">meet the</span></span>
-        <span class="line-mask"><span class="line">little guy</span></span>
-        <span class="line-mask"><span class="line">who's <span class="wob">you.</span></span></span>
+        <span class="line-mask"><span class="line">he grows</span></span>
+        <span class="line-mask"><span class="line">when <span class="wob">you</span> do.</span></span>
       </h1>
-      <p class="hero-sub">he hatches in a few taps, then grows from how you actually live. sleep well, move more, put the phone down, and watch him light up.</p>
+      <p class="hero-sub">sleep well, take a walk, put the phone down. he feels all of it.</p>
       <form class="waitlist" id="waitlist" novalidate>
         <input type="email" id="wlEmail" class="wl-input" placeholder="you@email.com" autocomplete="email" required />
         <button type="submit" class="btn-primary" data-magnetic data-cursor="join"><span>Join the waitlist</span><i>→</i></button>
@@ -59,22 +58,32 @@ export const BODY = `
       </div>
     </div>
     <div class="stage" id="stage">
-      <div class="creature" id="creature">
-        <div class="cr-glow" aria-hidden="true"></div>
-        <div class="cr-zzz" aria-hidden="true"><span>z</span><span>z</span><span>z</span></div>
-        <div class="cr-arm cr-arm-l"></div>
-        <div class="cr-arm cr-arm-r"></div>
-        <div class="cr-body">
-          <div class="cr-eye cr-eye-l"><div class="cr-pupil"></div></div>
-          <div class="cr-eye cr-eye-r"><div class="cr-pupil"></div></div>
-          <div class="cr-blush cr-blush-l"></div>
-          <div class="cr-blush cr-blush-r"></div>
-          <div class="cr-mouth"></div>
+      <div class="stage-scene">
+        <div class="hill" aria-hidden="true"></div>
+        <div class="stage-tokens" aria-hidden="true">
+          <span class="tok tok-heart"></span>
+          <span class="tok tok-moon"></span>
+          <span class="tok tok-coin"></span>
+          <span class="tok tok-spark"></span>
+          <span class="tok tok-leaf"></span>
         </div>
-        <div class="cr-foot cr-foot-l"></div>
-        <div class="cr-foot cr-foot-r"></div>
+        <div class="creature" id="creature">
+          <div class="cr-glow" aria-hidden="true"></div>
+          <div class="cr-zzz" aria-hidden="true"><span>z</span><span>z</span><span>z</span></div>
+          <div class="cr-arm cr-arm-l"></div>
+          <div class="cr-arm cr-arm-r"></div>
+          <div class="cr-body">
+            <div class="cr-eye cr-eye-l"><div class="cr-pupil"></div></div>
+            <div class="cr-eye cr-eye-r"><div class="cr-pupil"></div></div>
+            <div class="cr-blush cr-blush-l"></div>
+            <div class="cr-blush cr-blush-r"></div>
+            <div class="cr-mouth"></div>
+          </div>
+          <div class="cr-foot cr-foot-l"></div>
+          <div class="cr-foot cr-foot-r"></div>
+        </div>
+        <div class="cr-shadow" id="crShadow"></div>
       </div>
-      <div class="cr-shadow" id="crShadow"></div>
       <div class="stage-controls">
         <div class="day-demo" id="dayDemo">
           <span class="day-q mono">last night i…</span>
@@ -82,7 +91,7 @@ export const BODY = `
             <button class="day-opt" data-day="rough" data-cursor="">slept rough</button>
             <button class="day-opt" data-day="good" data-cursor="">slept great</button>
           </div>
-          <span class="day-say mono" id="daySay">tap one, watch him feel it ↑</span>
+          <span class="day-say mono" id="daySay">tap one. watch him feel it</span>
         </div>
         <div class="vibe-picker" id="vibePicker">
           <button class="vibe is-on" data-vibe="yolk" style="--v:#FFC23B" aria-label="yolk"></button>
@@ -90,7 +99,7 @@ export const BODY = `
           <button class="vibe" data-vibe="feral" style="--v:#73E0AE" aria-label="feral"></button>
           <button class="vibe" data-vibe="dreamy" style="--v:#FF94C2" aria-label="dreamy"></button>
           <button class="vibe" data-vibe="berry" style="--v:#7B5CF0" aria-label="berry"></button>
-          <span class="vibe-say" id="vibeSay">yolk. the classic.</span>
+          <span class="vibe-say" id="vibeSay"></span>
         </div>
       </div>
     </div>
