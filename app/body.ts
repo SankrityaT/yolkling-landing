@@ -14,6 +14,7 @@ export const BODY = `
       <a href="#hatch" data-cursor="">Hatch</a>
       <a href="#how" data-cursor="">How</a>
       <a href="#collection" data-cursor="">Creatures</a>
+      <a href="#cards" data-cursor="">Cards</a>
       <a href="#feedback" data-cursor="">Say hi</a>
     </div>
     <div class="nav-right">
@@ -29,6 +30,7 @@ export const BODY = `
         <a href="#hatch" class="menu-link">Hatch</a>
         <a href="#how" class="menu-link">How it works</a>
         <a href="#collection" class="menu-link">Creatures</a>
+        <a href="#cards" class="menu-link">Cards</a>
         <a href="#feedback" class="menu-link">Say hi</a>
       </div>
       <div class="menu-foot mono">
@@ -141,7 +143,7 @@ export const BODY = `
         <div class="card-text">
           <div class="card-num">01</div>
           <h3 class="card-h">tell it<br/>your vibe</h3>
-          <p class="card-p">choose your colours, its look, its little quirks. a few taps and out comes a creature that knows the shape of you.</p>
+          <p class="card-p">three silly questions. where are you at 3pm on a saturday, pick a snack, your phone just died. out comes a creature shaped like the answers. or skip it and just pick.</p>
         </div>
         <div class="card-shot"><img src="/shots/vibe.png" alt="make your yolkling: pick its look and colour" loading="lazy"/></div>
       </div></div>
@@ -164,8 +166,8 @@ export const BODY = `
       <div class="card" id="card-4"><div class="card-inner">
         <div class="card-text">
           <div class="card-num">04</div>
-          <h3 class="card-h">go visit<br/>friends</h3>
-          <p class="card-p">send your yolk to a friend's room, see their little world, and leave a kind note. a visit cheers them both up. that's the whole product.</p>
+          <h3 class="card-h">he wanders<br/>off</h3>
+          <p class="card-p">once a day he slips out on his own and comes home with a postcard. visit your friends' rooms, leave a kind note, swap a spare hat. a visit cheers everyone up.</p>
         </div>
         <div class="card-shot"><img src="/shots/visit.png" alt="visit a friend's room, wave, leave a note, send a gift" loading="lazy"/></div>
       </div></div>
@@ -192,27 +194,44 @@ export const BODY = `
   <section class="collection" id="collection">
     <div class="col-pin">
       <div class="col-field" id="colField"></div>
-      <div class="col-head col-head-in"><span class="mono">[ 05 / gotta hatch 'em ]</span><h2 class="big-h">912 species.<br/>yours is just<br/>the first.</h2></div>
+      <div class="col-head col-head-in"><span class="mono">[ 05 / gotta hatch 'em ]</span><h2 class="big-h">203 species.<br/>yours is just<br/>the first.</h2></div>
       <div class="col-head col-head-out"><h2 class="big-h">what will<br/>you <span class="wob2">hatch?</span></h2></div>
     </div>
   </section>
 
+  <section class="cardsec" id="cards">
+    <div class="section-head"><span class="mono">[ 06 / every find is a card ]</span><span class="mono">six finishes, pearl to aurora</span></div>
+    <div class="cardsec-wrap">
+      <div class="ycards" aria-hidden="true">
+        <div class="ycard ycard-1"><span class="ycard-foil"></span><span class="ycard-pet" style="--pc:#8FD0FF"></span><span class="ycard-name">moonpuff</span><span class="ycard-serial mono">no. 009 / 32</span></div>
+        <div class="ycard ycard-2"><span class="ycard-foil"></span><span class="ycard-pet" style="--pc:#FFC23B"></span><span class="ycard-name">sunny yolkstar</span><span class="ycard-serial mono">no. 001 / 32</span></div>
+        <div class="ycard ycard-3"><span class="ycard-foil"></span><span class="ycard-pet" style="--pc:#73E0AE"></span><span class="ycard-name">clovi</span><span class="ycard-serial mono">no. 014 / 32</span></div>
+      </div>
+      <div class="cardsec-copy">
+        <h2 class="big-h">every find<br/>is a card.</h2>
+        <p>a new species arrives face down. scratch it open, flip it over, watch the foil catch the light. six holo finishes, pearl to aurora, and the card backs give the rarity away before you even turn them.</p>
+        <p>and the rarest foil in the game is on your own card. it comes from trust, which only grows when you take care of yourself. <strong>you cannot buy it.</strong></p>
+      </div>
+    </div>
+  </section>
+
   <section class="store" id="store">
-    <div class="section-head"><span class="mono">[ 06 / dress them up ]</span><span class="mono">this is how we keep the lights on</span></div>
+    <div class="section-head"><span class="mono">[ 07 / dress them up ]</span><span class="mono">all earned, never bought</span></div>
     <div class="store-wrap">
       <h2 class="big-h">a little shop of hats,<br/>rooms and rare colours.</h2>
-      <p class="store-lead">your yolkling earns coins just by you living well. sleep, water, sunlight, showing up. spend them on outfits, tiny rooms and seasonal looks. that is the free way, and it is the main way.</p>
+      <p class="store-lead">yolks are earned by living: check-ins, focus sessions, steps, sleep, streaks. spend them on the closet and the room. they are never for sale, at any price.</p>
       <div class="store-grid">
-        <div class="store-card"><span class="store-chip" style="--c:#FF94C2"></span><h3>outfits and hats</h3><p>dress your little guy, mix and match, and swap a spare with a friend. both of you have to say yes.</p></div>
-        <div class="store-card"><span class="store-chip" style="--c:#8FD0FF"></span><h3>little rooms</h3><p>give them a cosy home to decorate, and to show off when a friend's yolkling comes to visit.</p></div>
-        <div class="store-card"><span class="store-chip" style="--c:#73E0AE"></span><h3>rare and seasonal</h3><p>colours and species that only appear for a while. earn them, or chip in a couple bucks to grab one.</p></div>
+        <div class="store-card"><span class="store-chip" style="--c:#FF94C2"></span><h3>88 cosmetics</h3><p>hats, eyes and scarves to mix, match and collect. the good ones glow with a rarity aura.</p></div>
+        <div class="store-card"><span class="store-chip" style="--c:#8FD0FF"></span><h3>little rooms</h3><p>17 themes and 34 pieces of decor. build a home worth showing off when a friend's yolkling comes round.</p></div>
+        <div class="store-card"><span class="store-chip" style="--c:#73E0AE"></span><h3>21 rare colours</h3><p>solid, gradient and sheen finishes, plus seasonal drops that only appear for a while. all earnable.</p></div>
+        <div class="store-card"><span class="store-chip" style="--c:#FFD25A"></span><h3>trade your spares</h3><p>swap a spare cosmetic with a friend. both of you say yes, and you preview it on your own creature first.</p></div>
       </div>
-      <p class="store-fine mono">no gacha, no loot boxes, no tricks. you can earn almost everything for free. a few dollars now and then just covers the servers. that is the entire business.</p>
+      <p class="store-fine mono">no gacha, no loot boxes, no tricks. yolks are never for sale. the only thing money buys is yolkling+, and it gates nothing.</p>
     </div>
   </section>
 
   <section class="feedback" id="feedback">
-    <div class="section-head"><span class="mono">[ 07 / tell me what you think ]</span><span class="mono">i read every one</span></div>
+    <div class="section-head"><span class="mono">[ 08 / tell me what you think ]</span><span class="mono">i read every one</span></div>
     <div class="fb-wrap">
       <h2 class="big-h">would you actually use this?</h2>
       <p class="fb-sub">be honest. what would make you or a friend pay a couple bucks for it. what's missing. i'm one person building this and your note genuinely helps me decide what to do next.</p>
@@ -229,27 +248,22 @@ export const BODY = `
   </section>
 
   <section class="pricing" id="pricing">
-    <div class="section-head"><span class="mono">[ 08 / when we hatch ]</span><span class="mono">waitlist gets founding perks</span></div>
+    <div class="section-head"><span class="mono">[ 09 / when we hatch ]</span><span class="mono">waitlist gets founding perks</span></div>
     <h2 class="big-h pricing-h">free to hatch.<br/>always will be.</h2>
     <div class="plans">
       <article class="plan">
         <div class="plan-top"><span class="mono">FREE</span><span class="plan-price">$0</span></div>
-        <p class="plan-desc">one yolkling. forever. no ads, no creepy stuff, your data stays yours.</p>
-        <ul class="plan-list mono"><li>1 creature</li><li>grows with your habits</li><li>friend visits</li><li>private by design</li></ul>
+        <p class="plan-desc">the whole game. one yolkling, forever. no ads, no creepy stuff, your data stays yours.</p>
+        <ul class="plan-list mono"><li>grows with your habits</li><li>every species + cosmetic, earnable</li><li>friend visits, gifts + postcards</li><li>private by design</li></ul>
         <a href="#top" class="plan-btn" data-magnetic data-cursor="join">join the list</a>
       </article>
       <article class="plan plan-feat">
         <div class="plan-badge mono">SUPPORTER</div>
-        <div class="plan-top"><span class="mono">YOLKLING+</span><span class="plan-price">$4.99/mo</span></div>
+        <div class="plan-top"><span class="mono">YOLKLING+</span><span class="plan-price">$2.92<small>/mo</small></span></div>
+        <p class="plan-alt mono">billed $34.99 a year, or $4.99 month to month</p>
         <p class="plan-desc">a founding price, for people who want to support it. it doesn't unlock anything you can't already earn.</p>
-        <ul class="plan-list mono"><li>a supporter glow</li><li>400 yolks a month</li><li>gates nothing, ever</li></ul>
+        <ul class="plan-list mono"><li>400 yolks a month</li><li>a supporter mark on your profile</li><li>gates nothing, ever</li></ul>
         <a href="#top" class="plan-btn plan-btn-feat" data-magnetic data-cursor="join">join the list</a>
-      </article>
-      <article class="plan">
-        <div class="plan-top"><span class="mono">FRIENDS</span><span class="plan-price">free</span></div>
-        <p class="plan-desc">add the people you like. your creatures visit, leave gifts, and bring back postcards.</p>
-        <ul class="plan-list mono"><li>shared little village</li><li>swap cosmetics, gift yolks</li><li>it remembers everyone</li></ul>
-        <a href="#top" class="plan-btn" data-magnetic data-cursor="join">join the list</a>
       </article>
     </div>
   </section>

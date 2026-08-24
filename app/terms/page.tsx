@@ -128,8 +128,8 @@ export default function TermsPage() {
 
         <h2>yolkling plus</h2>
         <p>
-          yolkling plus is an optional, auto-renewing subscription, currently $4.99 a month as a
-          founding price (an annual plan may come later). payment is charged to your apple account
+          yolkling plus is an optional, auto-renewing subscription: $4.99 a month, or $34.99 a year
+          (which works out to about $2.92 a month). both are founding prices. payment is charged to your apple account
           when you confirm the purchase, and it renews automatically unless you cancel at least 24
           hours before the end of the current period; renewal is charged within 24 hours of that
           period ending. you can manage or cancel it any time in your apple account settings, and
@@ -148,8 +148,8 @@ export default function TermsPage() {
         </p>
         <p>
           what plus does not do. it does not gate the game. every species, every cosmetic, every
-          feature is reachable without paying. plus adds a supporter glow on your creature and a
-          monthly stipend of 400 yolks, and that is genuinely it. yolks themselves are never sold
+          feature is reachable without paying. plus adds a monthly stipend of 400 yolks and a
+          supporter mark on your profile, and that is genuinely it. yolks themselves are never sold
           outside that stipend, there are no loot boxes, and money never touches anything random.
         </p>
 

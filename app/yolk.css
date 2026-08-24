@@ -63,7 +63,7 @@ a{color:inherit;text-decoration:none}
 /* Belt-and-suspenders for a direct link (yolkling.com/#collection): the browser's own
    initial jump, before any JS has run, respects this. The JS nav handler measures the
    nav's real height and is authoritative once it runs. */
-#hatch,#how,#collection,#feedback{scroll-margin-top:96px}
+#hatch,#how,#collection,#cards,#feedback{scroll-margin-top:96px}
 .nav-logo{display:flex;align-items:center;gap:.5rem;font-size:1.5rem}
 .dot-logo{width:16px;height:16px;background:var(--grape);border-radius:50%;box-shadow:inset -3px -3px 0 rgba(0,0,0,.15)}
 .nav-links{position:absolute;left:50%;transform:translateX(-50%);display:flex;gap:1.8rem}
@@ -294,7 +294,9 @@ a{color:inherit;text-decoration:none}
    ============================================================ */
 .pricing{background:var(--bg-2)}
 .pricing-h{padding:clamp(2rem,5vw,4rem) clamp(1.2rem,4vw,3rem) 0}
-.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:clamp(1.5rem,4vw,3rem)}
+.plans{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;padding:clamp(1.5rem,4vw,3rem);max-width:940px;margin:0 auto}
+.plan-alt{font-size:.72rem;color:var(--ink-soft);margin-top:-.4rem}
+.plan-feat .plan-alt{color:rgba(255,255,255,.75)}
 .plan{border:3px solid var(--ink);border-radius:28px;padding:clamp(1.6rem,2.6vw,2.3rem);display:flex;flex-direction:column;gap:1.1rem;background:var(--bg);position:relative;transition:transform .4s var(--pop)}
 .plan:hover{transform:translateY(-8px) rotate(-.5deg)}
 .plan-feat{background:var(--grape);color:#fff;border-color:var(--ink)}
@@ -430,11 +432,33 @@ body{ background:var(--bg); }
   .pit{ height:420px; }
 }
 
+/* the cards section — every find is a card */
+.cardsec{ padding:clamp(3rem,8vw,6rem) clamp(1.2rem,4vw,3rem); max-width:1200px; margin:0 auto; }
+.cardsec-wrap{ display:grid; grid-template-columns:1.1fr 1fr; gap:clamp(1.5rem,4vw,3.5rem); align-items:center; margin-top:2.2rem; }
+.ycards{ display:flex; justify-content:center; align-items:center; padding:1.5rem 0; }
+.ycard{ position:relative; width:clamp(170px,17vw,225px); aspect-ratio:3/4.1; background:#fff; border:3px solid var(--ink); border-radius:20px; padding:1rem .9rem .8rem; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; gap:.2rem; overflow:hidden; box-shadow:0 14px 34px rgba(44,33,24,.14); }
+.ycard-1{ rotate:-9deg; z-index:1; margin-right:-26px; animation:tokfloat 6s ease-in-out infinite; }
+.ycard-2{ rotate:-1deg; z-index:3; width:clamp(190px,19vw,250px); animation:tokfloat 6s ease-in-out .8s infinite; }
+.ycard-3{ rotate:8deg; z-index:2; margin-left:-26px; animation:tokfloat 6s ease-in-out 1.6s infinite; }
+.ycard-foil{ position:absolute; inset:0; background:
+  conic-gradient(from 210deg at 60% 30%, rgba(255,148,194,.35), rgba(143,208,255,.35), rgba(115,224,174,.32), rgba(255,210,90,.35), rgba(123,92,240,.28), rgba(255,148,194,.35)); }
+.ycard-2 .ycard-foil{ background:
+  conic-gradient(from 40deg at 40% 25%, rgba(123,92,240,.4), rgba(255,148,194,.38), rgba(255,210,90,.4), rgba(115,224,174,.34), rgba(123,92,240,.4)); }
+.ycard-foil::after{ content:""; position:absolute; inset:0; background:linear-gradient(115deg, transparent 30%, rgba(255,255,255,.55) 45%, transparent 60%); }
+.ycard-pet{ position:relative; width:56%; aspect-ratio:1/1.04; background:var(--pc); border-radius:46% 54% 47% 53% / 54% 50% 50% 46%; box-shadow:inset -8px -10px 0 rgba(0,0,0,.1); margin-bottom:auto; margin-top:8%; }
+.ycard-pet::before,.ycard-pet::after{ content:""; position:absolute; top:36%; width:16%; aspect-ratio:1/1.3; background:var(--ink); border-radius:50%; }
+.ycard-pet::before{ left:26%; } .ycard-pet::after{ right:26%; }
+.ycard-name{ position:relative; font-family:"Onest",sans-serif; font-weight:800; font-size:1.02rem; color:var(--ink); }
+.ycard-serial{ position:relative; font-size:.62rem; color:var(--ink-soft); }
+.cardsec-copy p{ color:var(--ink-soft); font-size:clamp(1rem,1.25vw,1.18rem); line-height:1.6; margin-top:1.1rem; max-width:46ch; }
+.cardsec-copy strong{ color:var(--ink); }
+@media(max-width:860px){ .cardsec-wrap{ grid-template-columns:1fr; } .ycards{ order:2; } }
+
 /* the store / outfits section */
 .store{ padding:clamp(3rem,8vw,6rem) clamp(1.2rem,4vw,3rem); max-width:1200px; margin:0 auto; }
 .store-wrap{ margin-top:1.4rem; }
 .store-lead{ max-width:54ch; color:var(--ink-soft); font-size:clamp(1.05rem,1.3vw,1.25rem); line-height:1.55; margin:1rem 0 2rem; }
-.store-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; }
+.store-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:1rem; }
 .store-card{ border:2px solid var(--ink); border-radius:24px; background:var(--bg-2); padding:1.6rem; }
 .store-chip{ display:block; width:42px; height:42px; border-radius:14px; background:var(--c); border:2px solid var(--ink); box-shadow:inset -4px -4px 0 rgba(0,0,0,.12); margin-bottom:1rem; }
 .store-card h3{ font-family:"Onest",sans-serif; font-weight:700; font-size:1.3rem; line-height:1.1; }
