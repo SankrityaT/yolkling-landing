@@ -102,7 +102,7 @@ export default function PrivacyPage() {
         </Link>
 
         <h1 className="leg-title">privacy</h1>
-        <p className="leg-updated">last updated, june 2026</p>
+        <p className="leg-updated">last updated, september 2026</p>
 
         <p className="leg-lead">
           yolkling is made by one person, and the whole point is to be gentle, including with your
@@ -111,58 +111,87 @@ export default function PrivacyPage() {
           how that works.
         </p>
 
-        <h2>what we collect right now</h2>
+        <h2>what we collect</h2>
         <p>
-          today yolkling is just a website with a waitlist. there is no app yet. so at the moment we
-          only collect two things.
-        </p>
-        <ul>
-          <li>
-            <strong>your waitlist email.</strong> if you sign up, we store the email address you
-            typed in.
-          </li>
-          <li>
-            <strong>feedback you choose to send.</strong> if you submit a feedback message, we store
-            what you wrote so we can read it and improve.
-          </li>
-        </ul>
-        <p>
-          that is it. we do not ask for your name, your location, your contacts, or anything else.
+          yolkling is an ios app, plus this website. here is everything it touches, in plain terms.
         </p>
 
-        <h2>why we collect it</h2>
+        <h3>health data</h3>
         <p>
-          we keep your email for one reason, to send you a single email when yolkling launches.
-          after that we are not going to spam you. feedback is kept so we can actually read what you
-          told us and make the app better. we do not use any of this to build a profile of you.
+          with your permission, yolkling reads two things from apple health: your step count and
+          your sleep. it uses them for one purpose only, to let real life feed your creature. that
+          reading happens entirely on your device.
+        </p>
+        <p>
+          your health data is never sent to our servers or to anyone else. we could not sell it if
+          we wanted to, because we never receive it. connecting health is optional and the whole app
+          works without it. you can withdraw permission at any time in the apple health app, and
+          yolkling simply stops reading.
+        </p>
+
+        <h3>screen time</h3>
+        <p>
+          with your permission, an apple extension works out a daily total of your time on the
+          phone. it is aggregate only, it never sees which apps or websites you used, and it hands
+          back a single number. that number stays on your device. this is optional too.
+        </p>
+
+        <h3>sign in with apple</h3>
+        <p>
+          signing in gives us one thing, the anonymous identifier apple provides. we do not request
+          your name or your email address, and we do not receive them. that identifier is how your
+          creature survives a new phone and how friends find you.
+        </p>
+
+        <h3>what we store on our server</h3>
+        <p>
+          your creature (its name, appearance, streak, coins and items owned), the room you share
+          with friends, your friend connections, waves and postcards, and any feedback you send.
+          this exists for one reason: so your creature survives a reinstall or a new phone.
+        </p>
+
+        <h3>subscriptions</h3>
+        <p>
+          payments are handled by apple, and by revenuecat, our subscription provider, which tells
+          us whether a subscription is active. we never see your card details, your name, or your
+          address.
+        </p>
+
+        <h3>the website</h3>
+        <p>
+          if you join the waitlist we store the email you typed in, and if you send feedback we
+          store what you wrote so we can read it. neither is used to build a profile of you.
+        </p>
+
+        <h2>what we do not do</h2>
+        <p>
+          no advertising. no analytics or tracking sdks. no selling data, ever. no third party
+          trackers. and health and screen time data never leave your device, full stop.
         </p>
 
         <h2>how it is stored</h2>
         <p>
-          your email and any feedback live in a database hosted on supabase. emails we send go out
-          through a service called resend, which needs your address to deliver the message. data is
-          encrypted in transit using tls, and encrypted at rest. we try to keep the footprint small
-          and boring on purpose.
-        </p>
-
-        <h2>who we share it with</h2>
-        <p>
-          nobody, in the sense that matters. we do not sell your data, we do not rent it, and we do
-          not hand it to advertisers. the only outside parties involved are the infrastructure tools
-          we need to actually run the thing, supabase to store data and resend to send the one
-          launch email. they process data on our behalf so the site can work, and that is the extent
-          of it.
+          server data lives in a database hosted on supabase, encrypted in transit using tls and
+          encrypted at rest. emails we send go out through a service called resend, which needs your
+          address to deliver the message. these services process data on our behalf so yolkling can
+          work, and that is the extent of it.
         </p>
 
         <h2>your rights</h2>
         <p>
-          it is your data, so you get to decide. you can ask us to delete your email from the
-          waitlist at any time, and we will remove it. you can also ask us what we have on file, or
-          ask us to correct it. just email{" "}
+          it is your data, so you get to decide. you can ask us what we have on file, ask us to
+          correct it, or ask us to delete it, including your waitlist email. just write to{" "}
           <a className="leg-link" href="mailto:hey@yolkling.com">
             hey@yolkling.com
           </a>{" "}
           and a real human, me, will take care of it.
+        </p>
+
+        <h2>deleting your data</h2>
+        <p>
+          there is a delete my account button inside the app, under the you tab. it removes your
+          creature, your collection, your friends, your postcards and everything else we hold about
+          you from our servers. it is immediate and it is not recoverable, which is the point.
         </p>
 
         <h2>cookies and analytics</h2>
@@ -173,20 +202,10 @@ export default function PrivacyPage() {
           so honestly.
         </p>
 
-        <h2>the future app</h2>
-        <p>
-          when the app ships, it will store your creature and your progress, a minimal amount of
-          account info, and, if you opt in, friend connections so your creature can visit friends.
-          gentle activity signals stay on your device wherever we can manage it. the same promises
-          hold, as little as possible, no ads, no selling, no creepy tracking. we will update this
-          page with the specifics before any of that goes live.
-        </p>
-
         <h2>changes to this policy</h2>
         <p>
           if we change how any of this works, we will update this page and change the date at the
-          top. nothing sneaky. for anything that actually affects you, like the app launching, we
-          will be clear about it.
+          top. nothing sneaky. for anything that actually affects you, we will be clear about it.
         </p>
 
         <h2>contact</h2>
@@ -198,7 +217,7 @@ export default function PrivacyPage() {
           .
         </p>
 
-        <p className="leg-foot">yolkling, a cozy little companion. made with care, june 2026.</p>
+        <p className="leg-foot">yolkling, a cozy little companion. made with care, september 2026.</p>
       </div>
     </main>
   );

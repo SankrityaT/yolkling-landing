@@ -3,7 +3,7 @@ import Link from "next/link";
 export const metadata = {
   title: "terms, yolkling",
   description:
-    "the simple, human terms for using the yolkling waitlist and the app once it arrives. short, plain, and not scary.",
+    "the simple, human terms for using yolkling, the app and the website. short, plain, and not scary.",
 };
 
 const PAGE_CSS = `
@@ -102,28 +102,27 @@ export default function TermsPage() {
         </Link>
 
         <h1 className="leg-title">terms</h1>
-        <p className="leg-updated">last updated, june 2026</p>
+        <p className="leg-updated">last updated, september 2026</p>
 
         <p className="leg-lead">
-          these are the plain terms for using yolkling. no lawyer speak, no traps. by joining the
-          waitlist or, later, using the app, you are agreeing to the friendly stuff below.
+          these are the plain terms for using yolkling. no lawyer speak, no traps. by using the app
+          or this website, you are agreeing to the friendly stuff below.
         </p>
 
         <h2>what yolkling is</h2>
         <p>
-          yolkling is a cozy app where you hatch and look after a little virtual creature. right now
-          it is pre launch, so all you can do is join a waitlist and send feedback. the app itself is
-          coming, ios first. it is free to hatch, free to play, and free to keep, with one optional
-          subscription for people who want to support it. this is a small project made by one person
-          who just wants to cover the running costs, not get rich.
+          yolkling is a cozy ios app where you hatch and look after a little virtual creature that
+          grows when you take care of yourself. it is free to hatch, free to play, and free to keep,
+          with one optional subscription (yolkling plus) for people who want to support it. this is
+          a small project made by one person who just wants to cover the running costs, not get
+          rich.
         </p>
 
-        <h2>it is early, things will change</h2>
+        <h2>it is young, things will change</h2>
         <p>
-          because this is pre launch and made by one human, things will move around. features,
-          timelines, and how the app works can all change, and the launch date is a best guess, not a
-          promise. we might even decide not to ship something. we will try to be upfront when that
-          happens.
+          because this is a young app made by one human, things will move around. features and how
+          the app works can change, and sometimes something gets removed or reworked. we will try to
+          be upfront when that happens.
         </p>
 
         <h2>yolkling plus</h2>
@@ -163,9 +162,9 @@ export default function TermsPage() {
 
         <h2>your account and content</h2>
         <p>
-          when the app launches, your creature and progress are yours to enjoy. anything you send us,
-          like feedback, you are telling us we can read it and use it to improve yolkling. keep your
-          login details to yourself, and let us know at{" "}
+          your creature and progress are yours to enjoy. anything you send us, like feedback, you
+          are telling us we can read it and use it to improve yolkling. sign in is handled by apple,
+          so there is no password to lose, and let us know at{" "}
           <a className="leg-link" href="mailto:hey@yolkling.com">
             hey@yolkling.com
           </a>{" "}
@@ -211,7 +210,7 @@ export default function TermsPage() {
           and a real person will answer.
         </p>
 
-        <p className="leg-foot">yolkling, a cozy little companion. made with care, june 2026.</p>
+        <p className="leg-foot">yolkling, a cozy little companion. made with care, september 2026.</p>
       </div>
     </main>
   );
