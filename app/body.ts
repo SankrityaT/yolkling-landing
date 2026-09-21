@@ -266,6 +266,7 @@ export const BODY = `
         <a href="#top" class="plan-btn plan-btn-feat" data-magnetic data-cursor="join">join the list</a>
       </article>
     </div>
+    <p class="pricing-note">prices above are founding prices for people who join now, they won't stay this low forever. we'll also be adding more optional extras over time, things like limited edition cosmetics and seasonal drops, always cosmetic, never required to play.</p>
   </section>
 
   <footer class="outro" id="outro">
