@@ -202,6 +202,17 @@ export default function PrivacyPage() {
           so honestly.
         </p>
 
+        <h2>children</h2>
+        <p>
+          yolkling is not directed at children under 13, and we do not knowingly collect data from
+          anyone under 13. if you believe a child has used yolkling and shared information with us,
+          email{" "}
+          <a className="leg-link" href="mailto:hey@yolkling.com">
+            hey@yolkling.com
+          </a>{" "}
+          and we will delete it.
+        </p>
+
         <h2>changes to this policy</h2>
         <p>
           if we change how any of this works, we will update this page and change the date at the
