@@ -187,6 +187,22 @@ export default function TermsPage() {
           the joy of it.
         </p>
 
+        <h2>disputes and arbitration</h2>
+        <p>
+          if something ever goes wrong between us, please email{" "}
+          <a className="leg-link" href="mailto:hey@yolkling.com">
+            hey@yolkling.com
+          </a>{" "}
+          first, that is always the fastest way to sort it out, and it usually works. if we genuinely
+          cannot resolve it that way, you and yolkling agree to settle the dispute through binding,
+          individual arbitration rather than in court, and not as part of a class action, class
+          arbitration, or any other group proceeding. that means both of us are giving up the right
+          to a jury trial and to join or lead a class action against the other. either of us can still
+          bring a qualifying dispute to small claims court instead of arbitration, if you would
+          prefer. this applies to any dispute about the app, this website, or these terms, except
+          where the law does not allow it.
+        </p>
+
         <h2>privacy</h2>
         <p>
           how we handle your data is its own page, and it is short and honest. have a read of the{" "}
