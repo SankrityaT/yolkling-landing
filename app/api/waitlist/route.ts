@@ -26,6 +26,11 @@ export async function POST(req: Request) {
     // un-awaited fetch, so a fire-and-forget send silently never reaches Resend.
     await sendWelcomeEmail(email, result.code);
   }
+  // "error" means the write genuinely failed after retries, this must NOT look like
+  // success to the client, that's exactly the silent-data-loss failure mode to avoid.
+  if (result.status === "error") {
+    return NextResponse.json({ ok: false, status: "error", error: "please try again in a moment" }, { status: 503 });
+  }
   return NextResponse.json({ ok: true, status: result.status });
 }
 

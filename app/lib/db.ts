@@ -6,17 +6,37 @@ const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const EMAIL_FROM = process.env.EMAIL_FROM || "Yolkling <onboarding@resend.dev>";
 
-function sb(path: string, init: RequestInit = {}) {
-  return fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
-    ...init,
-    headers: {
-      apikey: SUPABASE_KEY as string,
-      Authorization: `Bearer ${SUPABASE_KEY}`,
-      "Content-Type": "application/json",
-      ...(init.headers || {}),
-    },
-    cache: "no-store",
-  });
+// Retries transient failures (network blips, Supabase 5xx, rate limiting) so a burst
+// of ad-driven traffic doesn't turn a brief hiccup into a lost signup. Does not retry
+// 4xx (bad request, RLS denial, etc.), those are real errors, not transient ones.
+async function sb(path: string, init: RequestInit = {}, attempt = 1): Promise<Response> {
+  const MAX_ATTEMPTS = 3;
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
+      ...init,
+      headers: {
+        apikey: SUPABASE_KEY as string,
+        Authorization: `Bearer ${SUPABASE_KEY}`,
+        "Content-Type": "application/json",
+        ...(init.headers || {}),
+      },
+      cache: "no-store",
+      signal: AbortSignal.timeout(8000),
+    });
+    const isRetryable = res.status === 429 || res.status >= 500;
+    if (isRetryable && attempt < MAX_ATTEMPTS) {
+      await new Promise((r) => setTimeout(r, 200 * attempt));
+      return sb(path, init, attempt + 1);
+    }
+    return res;
+  } catch (err) {
+    // network error / timeout, not an HTTP response at all
+    if (attempt < MAX_ATTEMPTS) {
+      await new Promise((r) => setTimeout(r, 200 * attempt));
+      return sb(path, init, attempt + 1);
+    }
+    throw err;
+  }
 }
 
 export interface UtmParams {
@@ -30,21 +50,33 @@ export interface UtmParams {
 export async function insertWaitlist(
   email: string,
   utm: UtmParams = {},
-): Promise<{ status: "ok" | "dup" | "skip"; code?: string }> {
+): Promise<{ status: "ok" | "dup" | "skip" | "error"; code?: string }> {
+  // "skip" = Supabase isn't wired up at all, expected in local/preview envs.
+  // "error" = it's wired up but the write genuinely failed after retries, this is
+  // the one the client must NOT treat as success.
   if (!SUPABASE_URL || !SUPABASE_KEY) return { status: "skip" };
-  // return=representation so we get the founder code the DB trigger generated.
-  const res = await sb("waitlist", {
-    method: "POST",
-    headers: { Prefer: "resolution=ignore-duplicates,return=representation" },
-    body: JSON.stringify({ email: email.toLowerCase().trim(), ...utm }),
-  });
-  if (!res.ok) return { status: "skip" };
-  const rows = await res.json().catch(() => []);
-  // a fresh insert returns the row; an ignored duplicate returns nothing.
-  if (Array.isArray(rows) && rows.length > 0) {
-    return { status: "ok", code: rows[0]?.referral_code };
+  try {
+    // return=representation so we get the founder code the DB trigger generated.
+    const res = await sb("waitlist", {
+      method: "POST",
+      headers: { Prefer: "resolution=ignore-duplicates,return=representation" },
+      body: JSON.stringify({ email: email.toLowerCase().trim(), ...utm }),
+    });
+    if (!res.ok) {
+      console.error(`insertWaitlist failed: ${res.status} ${await res.text().catch(() => "")}`);
+      return { status: "error" };
+    }
+    const rows = await res.json().catch(() => []);
+    // a fresh insert returns the row; an ignored duplicate returns nothing.
+    if (Array.isArray(rows) && rows.length > 0) {
+      return { status: "ok", code: rows[0]?.referral_code };
+    }
+    return { status: "dup" };
+  } catch (err) {
+    // logged, not swallowed: the only trace of a lost signup if this ever fires.
+    console.error("insertWaitlist threw after retries:", err);
+    return { status: "error" };
   }
-  return { status: "dup" };
 }
 
 export async function getWaitlistCount(): Promise<number | null> {

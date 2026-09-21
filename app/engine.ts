@@ -409,8 +409,24 @@ export function bootYolkling() {
       const input = document.getElementById("wlEmail") as HTMLInputElement;
       const email = input.value.trim();
       if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { input.style.borderColor = "#d4502e"; return; }
-      let status = "ok";
-      try { const r = await fetch("/api/waitlist", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email, ...getStoredUtm() }) }); const j = await r.json(); status = (j && j.status) || "ok"; } catch {}
+      const submitBtn = wlForm.querySelector("button[type=submit], .btn-primary") as HTMLButtonElement | null;
+      let status = "error";
+      try {
+        const r = await fetch("/api/waitlist", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email, ...getStoredUtm() }) });
+        const j = await r.json().catch(() => null);
+        status = (j && j.status) || (r.ok ? "ok" : "error");
+      } catch { status = "error"; }
+
+      // A real failure must never look like success, that's the whole point: show it
+      // inline and leave the form usable so the person can just try again.
+      if (status === "error") {
+        const meta = document.querySelector(".wl-meta") as HTMLElement;
+        if (meta) meta.textContent = "something went wrong on our end, please try again in a moment.";
+        input.style.borderColor = "#d4502e";
+        if (submitBtn) submitBtn.disabled = false;
+        return;
+      }
+
       wlForm.style.display = "none";
       const meta = document.querySelector(".wl-meta") as HTMLElement; if (meta) meta.style.display = "none";
       const done = document.getElementById("wlDone");
