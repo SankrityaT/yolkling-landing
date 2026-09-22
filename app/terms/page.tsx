@@ -114,13 +114,13 @@ export default function TermsPage() {
           yolkling is a cozy ios app where you hatch and look after a little virtual creature that
           grows when you take care of yourself. it is free to hatch, free to play, and free to keep,
           with one optional subscription (yolkling plus) for people who want to support it. this is
-          a small project made by one person who just wants to cover the running costs, not get
+          a small project made by two people who just want to cover the running costs, not get
           rich.
         </p>
 
         <h2>it is young, things will change</h2>
         <p>
-          because this is a young app made by one human, things will move around. features and how
+          because this is a young app made by two humans, things will move around. features and how
           the app works can change, and sometimes something gets removed or reworked. we will try to
           be upfront when that happens.
         </p>
@@ -176,7 +176,7 @@ export default function TermsPage() {
         <p>
           yolkling is provided as is. it is a small, lovingly made thing, not a critical service. we
           cannot promise it will always be available, bug free, or perfect, and you use it at your
-          own discretion. if it goes down for a bit, please be patient with the one person keeping it
+          own discretion. if it goes down for a bit, please be patient with the two people keeping it
           running.
         </p>
 

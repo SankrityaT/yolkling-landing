@@ -105,7 +105,7 @@ export default function PrivacyPage() {
         <p className="leg-updated">last updated, september 2026</p>
 
         <p className="leg-lead">
-          yolkling is made by one person, and the whole point is to be gentle, including with your
+          yolkling is made by two people, and the whole point is to be gentle, including with your
           data. we collect as little as we can, we do not run ads, we do not let third parties track
           you, and we will never sell your data. your data stays yours. here is the plain version of
           how that works.

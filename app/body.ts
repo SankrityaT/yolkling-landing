@@ -323,7 +323,7 @@ export const BODY = `
       <div class="footer-col"><span class="brand">yolkling</span><p class="mono">the little guy who's secretly you.</p></div>
       <div class="footer-col mono"><a href="#hatch">Hatch</a><a href="#how">How</a><a href="#collection">Creatures</a><a href="#cards">Cards</a></div>
       <div class="footer-col mono"><a href="/support">support</a><a href="/press">press</a><a href="/privacy">privacy</a><a href="/terms">terms</a></div>
-      <div class="footer-col mono footer-status"><p class="live when-wl">● <span id="footLive">early access is open</span></p><p class="live when-live">● out now on the App Store</p><p>made by one person, with snacks and feelings</p><p>© 2026, please drink water</p></div>
+      <div class="footer-col mono footer-status"><p class="live when-wl">● <span id="footLive">early access is open</span></p><p class="live when-live">● out now on the App Store</p><p>made by two people, with snacks and feelings</p><p>© 2026, please drink water</p></div>
     </div>
     <p class="footer-legal">Apple, the Apple logo, iPhone and Apple Health are trademarks of Apple Inc., registered in the U.S. and other countries. App Store is a service mark of Apple Inc. Tamagotchi is a trademark of Bandai. Yolkling is not affiliated with Apple or Bandai.</p>
   </footer>

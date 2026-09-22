@@ -118,25 +118,27 @@ export default function SupportPage() {
         <p className="leg-updated">a real human reads every message</p>
 
         <p className="leg-lead">
-          yolkling is made by one person. if something is broken, confusing, or you just want a hand,
-          email me and i will get back to you. no ticket robots, no phone tree, just me.
+          yolkling is made by two people. if something is broken, confusing, or you just want a hand,
+          email us and we will get back to you. no ticket robots, no phone tree, just us.
         </p>
 
         <h2>get help</h2>
-        <p>the fastest way to reach me is email.</p>
+        <p>the fastest way to reach us is email.</p>
         <a className="leg-mail" href="mailto:hey@yolkling.com">
           hey@yolkling.com
         </a>
         <p>
           you can also tap <strong>share a thought</strong> inside the app (on the “you” screen) to
-          send a note straight to me. i read every one.
+          send a note straight to us. we read every one.
         </p>
 
         <h2>common questions</h2>
 
         <p>
-          <strong>is it free?</strong> yes, completely. no ads, no in-app purchases, nothing to buy.
-          you earn everything by showing up for yourself.
+          <strong>is it free?</strong> yes. no ads, and everything in the game is earned by showing up
+          for yourself. there is one optional subscription, yolkling plus, for people who want to
+          support it. it adds a supporter glow and a monthly handful of yolks, and nothing is locked
+          without it.
         </p>
 
         <p>
@@ -182,8 +184,8 @@ export default function SupportPage() {
 
         <h2>how fast do i reply?</h2>
         <p>
-          it is just me, so usually within a couple of days, often sooner. if it is urgent, say so in
-          the subject line and i will jump on it.
+          it is just the two of us, so usually within a couple of days, often sooner. if it is urgent,
+          say so in the subject line and we will jump on it.
         </p>
 
         <h2>contact</h2>
@@ -195,7 +197,7 @@ export default function SupportPage() {
           .
         </p>
 
-        <p className="leg-foot">yolkling, made by one person who wants an app that wants you off your phone.</p>
+        <p className="leg-foot">yolkling, made by two people who want an app that wants you off your phone.</p>
       </div>
     </main>
   );

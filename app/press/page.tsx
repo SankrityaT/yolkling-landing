@@ -222,7 +222,7 @@ export default function PressPage() {
         <p className="leg-lead">
           yolkling is a virtual pet that grows when you take care of yourself in real life. your
           steps, sleep, and time off your phone feed your yolk, and you collect new yolks and dress
-          them up. it is made by one person, it is completely free, and it is the only app that
+          them up. it is made by two people, it is free to play, and it is the only app that
           actually wants you to put your phone down. everything below is free to use in a story, no
           need to ask.
         </p>
@@ -233,9 +233,9 @@ export default function PressPage() {
             <dt>name</dt>
             <dd>Yolkling</dd>
             <dt>developer</dt>
-            <dd>Sankritya Thakur, one person</dd>
+            <dd>Sankritya Thakur and Havishea Vannemreddy, a two-person team</dd>
             <dt>price</dt>
-            <dd>free, no ads, no in-app purchases</dd>
+            <dd>free, no ads. one optional supporter subscription, yolkling plus</dd>
             <dt>platform</dt>
             <dd>iOS (iPhone)</dd>
             <dt>requires</dt>
@@ -266,11 +266,11 @@ export default function PressPage() {
         <h2>one paragraph</h2>
         <div className="copyblock">
           <span className="copyblock-label">for brief coverage</span>
-          Yolkling is a free iOS app built by one person, a small virtual creature you hatch and
+          Yolkling is a free iOS app built by a two-person team, a small virtual creature you hatch and
           raise by actually living well. Steps, sleep, and time away from your phone feed it and
           make it visibly livelier, and a gentle daily check-in and focus sessions earn you a soft
-          currency to dress it up and grow your collection. There is no gacha, no loot boxes, and no
-          in-app purchases: everything is earned. Friends can visit each other&apos;s rooms and send
+          currency to dress it up and grow your collection. There is no gacha and no loot boxes, and
+          nothing in the game is locked behind a payment: everything is earned. Friends can visit each other&apos;s rooms and send
           kind notes. It is, as far as we can tell, the only app that wants you off your phone.
         </div>
 
@@ -294,10 +294,11 @@ export default function PressPage() {
           </p>
           <p>
             The economy is entirely earned: a daily mood check-in, focus sessions, and healthy days
-            pay out a soft currency spent on hats, colors, and room decor, never real money. Friends
+            pay out a soft currency spent on hats, colors, and room decor, never sold on its own. Friends
             add each other with a code, visit one another&apos;s rooms, and send small kind notes.
-            There are no ads, no subscriptions, and no tracking. It is a one-person project made
-            because the developer wanted an app that was actually on their side.
+            There are no ads and no tracking, and the one optional subscription is a way to support
+            the app, not a way to unlock it. It is a two-person project made by people who wanted an
+            app that was actually on their side.
           </p>
         </div>
 
@@ -311,8 +312,8 @@ export default function PressPage() {
             app. this one is designed to reward you for closing it.
           </li>
           <li>
-            <strong>built by one person.</strong> no studio, no funding round, no growth team. just
-            someone who wanted a wellbeing app that felt kind instead of naggy.
+            <strong>built by two people.</strong> no studio, no funding round, no growth team. just
+            two friends who wanted a wellbeing app that felt kind instead of naggy.
           </li>
           <li>
             <strong>no dark patterns, on purpose.</strong> no streak-loss guilt, no loot boxes, no
@@ -353,8 +354,9 @@ export default function PressPage() {
 
         <h2>about the developer</h2>
         <p>
-          Sankritya Thakur is building Yolkling solo, end to end, design and code. no team, no
-          investors. happy to do interviews, demos, or a quick call, just ask.
+          Yolkling is built by Sankritya Thakur and Havishea Vannemreddy, a team of two covering
+          everything between them: code, design, and marketing. no investors. happy to do interviews,
+          demos, or a quick call, just ask.
         </p>
 
         <h2>get in touch</h2>
@@ -363,7 +365,7 @@ export default function PressPage() {
           hey@yolkling.com
         </a>
 
-        <p className="leg-foot">yolkling, made by one person who wants an app that wants you off your phone.</p>
+        <p className="leg-foot">yolkling, made by two people who want an app that wants you off your phone.</p>
       </div>
     </main>
   );

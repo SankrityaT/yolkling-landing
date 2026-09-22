@@ -123,7 +123,7 @@ hey, thank you for signing up for yolkling. it means a lot, genuinely.
 ${codeBlock}
 quick promise: this is the only email you will get from me until it is actually ready to hatch. no weekly newsletters, no nonsense. just one note when your little guy is ready.
 
-i am one person building this. i am not trying to get rich, i just want to cover the server bills. so it will be free to hatch, always.
+it is just two of us building this. we are not trying to get rich, we just want to cover the server bills. so it will be free to hatch, always.
 
 if you have a second, hit reply and tell me what would make you or a friend actually love this. i read every one.
 
@@ -151,7 +151,7 @@ function welcomeHtml(code?: string): string {
       quick promise: this is the only email you will get from me until it is actually ready to hatch. no weekly newsletters, no nonsense. just one note when your little guy is ready.
     </p>
     <p style="font-size:16px;line-height:1.55;color:#4a4030;margin:0 0 14px">
-      i am one person building this. i am not trying to get rich, i just want to cover the server bills. so it will be free to hatch, always.
+      it is just two of us building this. we are not trying to get rich, we just want to cover the server bills. so it will be free to hatch, always.
     </p>
     <p style="font-size:16px;line-height:1.55;color:#4a4030;margin:0 0 22px">
       if you have a second, hit reply and tell me what would make you or a friend actually love this. i read every one.
