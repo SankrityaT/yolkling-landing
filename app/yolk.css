@@ -315,6 +315,10 @@ a{color:inherit;text-decoration:none}
 .col-card .mini{width:54%;aspect-ratio:1/1.05;border-radius:46% 54% 47% 53% / 54% 50% 50% 46%;position:relative;box-shadow:inset -8px -10px 0 rgba(0,0,0,.12)}
 .col-card .mini::before,.col-card .mini::after{content:"";position:absolute;top:32%;width:17%;height:20%;background:#fff;border-radius:50%}
 .col-card .mini::before{left:25%} .col-card .mini::after{right:25%}
+.blobby-real{background:none;box-shadow:none;border-radius:0;object-fit:contain;user-select:none;-webkit-user-drag:none;filter:drop-shadow(0 6px 8px rgba(42,36,27,.12))}
+.col-card{flex-direction:column;gap:6px}
+.col-card .mini-real{width:66%;height:auto;user-select:none;-webkit-user-drag:none}
+.col-card .mini-name{font-size:13px;color:var(--ink);opacity:.7;letter-spacing:.02em}
 .col-head{position:absolute;z-index:3;left:clamp(1.2rem,4vw,3rem);pointer-events:none}
 .col-head .mono,.col-head .big-h{color:var(--bg)}
 .col-head .wob2{color:var(--lemon)}

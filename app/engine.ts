@@ -9,6 +9,9 @@ import Lenis from "lenis";
 import { cardFront, setPose, paintBack, POSED } from "./yolkcard";
 
 const CANDY = ["#7B5CF0", "#FF94C2", "#73E0AE", "#FFD25A", "#FF8A5B", "#8FD0FF"];
+// Real species, rendered straight from the app's creature code (YolklingCore), so the
+// pit and the collection show what you actually hatch rather than stand-in blobs.
+const YOLKLINGS = [["aurelune", "aurelune"], ["queenbee", "queenbee"], ["coralqueen", "coralqueen"], ["mochaswirl", "mochaswirl"], ["ringling", "ringling"], ["willowqueen", "willowqueen"], ["abysscot", "abysscot"], ["goldenhoney", "goldenhoney"], ["sunny-yolkstar", "sunny yolkstar"], ["spotwing", "spotwing"], ["reefling", "reefling"], ["hotcocoa", "hotcocoa"], ["starwhisper", "starwhisper"], ["thymelet", "thymelet"], ["pearl-of-tides", "pearl-of-tides"], ["chai", "chai"], ["lilac-comet", "lilac comet"], ["escargo", "escargo"], ["dewfish", "dewfish"], ["woolly", "woolly"], ["snorkelpip", "snorkelpip"], ["honeydrop", "honeydrop"]];
 
 export function bootYolkling() {
   gsap.registerPlugin(ScrollTrigger, CustomEase);
@@ -285,8 +288,9 @@ export function bootYolkling() {
       const bodies = [];
       for (let i = 0; i < count; i++) {
         const rad = (W < 700 ? 30 : 46) + Math.random() * 20;
-        const el = document.createElement("div"); el.className = "blobby"; el.style.width = el.style.height = rad * 2 + "px";
-        el.style.background = CANDY[i % CANDY.length]; el.innerHTML = "<i></i>"; cont.appendChild(el);
+        const [file, name] = YOLKLINGS[i % YOLKLINGS.length];
+        const el = document.createElement("img"); el.className = "blobby blobby-real"; el.style.width = el.style.height = rad * 2 + "px";
+        el.src = `/shots/yolklings/${file}.webp`; el.alt = name; el.draggable = false; cont.appendChild(el);
         const b = Bodies.circle(rad + Math.random() * (W - 2 * rad), -40 - i * (W < 700 ? 60 : 90), rad, { restitution: 0.7, friction: 0.05, frictionAir: 0.01 });
         Composite.add(engine.world, b); bodies.push({ b, el, rad });
       }
@@ -311,7 +315,10 @@ export function bootYolkling() {
     const cardBg = ["#FFF3E0", "#FFE3EE", "#E6F8EF", "#FFF6D6", "#E9F4FF", "#F0EAFE"];
     const els = dirs.map((d, i) => {
       const el = document.createElement("div"); el.className = "col-card"; el.style.background = cardBg[i % cardBg.length];
-      const mini = document.createElement("div"); mini.className = "mini"; mini.style.background = CANDY[i % CANDY.length]; el.appendChild(mini);
+      const [file, name] = YOLKLINGS[(i + 3) % YOLKLINGS.length];
+      const mini = document.createElement("img"); mini.className = "mini-real"; mini.src = `/shots/yolklings/${file}.webp`;
+      mini.alt = ""; mini.draggable = false; el.appendChild(mini);
+      const label = document.createElement("span"); label.className = "mini-name mono"; label.textContent = name; el.appendChild(label);
       field.appendChild(el); return el;
     });
     const ends = dirs.map((d) => ({ x: d[0] * vw * (mob ? 0.7 : 0.5), y: d[1] * vh * (mob ? 0.7 : 0.5), z: 2000 }));
