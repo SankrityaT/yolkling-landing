@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://yolkling.com"),
   title: {
@@ -8,11 +9,11 @@ export const metadata: Metadata = {
     template: "%s · Yolkling",
   },
   description:
-    "hatch a one of a kind creature from your vibe. it grows when you take care of yourself and visits your friends. the app that wants you off your phone. ios first, coming soon. join the waitlist.",
+    `remember keeping a tamagotchi alive? this one looks after you. hatch a one of a kind creature that grows from your real sleep and steps, and visits your friends. for iPhone, on the App Store.`,
   keywords: [
     "yolkling", "virtual pet", "virtual pet app", "cozy app", "self care app",
-    "tamagotchi", "creature companion", "ios app", "digital wellbeing",
-    "screen time", "put your phone down", "cute app", "waitlist",
+    "tamagotchi", "tamagotchi app", "digital pet", "apple health pet", "creature companion", "ios app", "digital wellbeing",
+    "screen time", "put your phone down", "cute app",
   ],
   applicationName: "Yolkling",
   creator: "Yolkling",
@@ -23,7 +24,7 @@ export const metadata: Metadata = {
     siteName: "Yolkling",
     title: "Yolkling, the little guy who is secretly you",
     description:
-      "a tiny one of a kind creature you hatch from your vibe. it grows when you take care of yourself and gets sleepy when you doomscroll. ios, coming soon.",
+      `a tiny one of a kind creature you hatch from your vibe. it grows when you take care of yourself and gets sleepy when you doomscroll. for iPhone.`,
     locale: "en_US",
   },
   twitter: {

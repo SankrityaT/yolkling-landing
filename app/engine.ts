@@ -6,6 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { CustomEase } from "gsap/CustomEase";
 import Matter from "matter-js";
 import Lenis from "lenis";
+import { cardFront, setPose, paintBack, POSED } from "./yolkcard";
 
 const CANDY = ["#7B5CF0", "#FF94C2", "#73E0AE", "#FFD25A", "#FF8A5B", "#8FD0FF"];
 
@@ -42,18 +43,21 @@ export function bootYolkling() {
   function revealHero() {
     gsap.set(".hero-h1 .line", { yPercent: 115 });
     const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
-    tl.from(".stage", { scale: 0, opacity: 0, duration: 1, ease: "elastic.out(1,0.6)" }, 0)
+    tl.from(".hs-phone", { yPercent: 40, opacity: 0, duration: 1.1, ease: "power4.out" }, 0.3)
+      .from(".hs-field", { opacity: 0, duration: 1.2 }, 0.5)
       .to(".hero-h1 .line", { yPercent: 0, duration: 1, stagger: 0.1 }, 0.2)
       .from(".hero-eyebrow", { opacity: 0, y: 14, duration: 0.6 }, 0.2)
       .from(".hero-sub", { opacity: 0, y: 20, duration: 0.7 }, 0.6)
       .from(".waitlist, .wl-meta", { opacity: 0, y: 20, duration: 0.6, stagger: 0.1 }, 0.7)
       .from(".nav", { opacity: 0, y: -14, duration: 0.6 }, 0.3);
     initCreature();
+    tl.eventCallback("onComplete", () => window.dispatchEvent(new Event("yolk:ready")));
   }
 
   /* ---------- HERO CREATURE ---------- */
   function initCreature() {
     const cr = document.getElementById("creature");
+    if (!cr || (document.getElementById("stage") as any).hidden) return;
     const body = cr.querySelector(".cr-body");
     const stage = document.getElementById("stage");
     const shadow = document.getElementById("crShadow");
@@ -193,23 +197,12 @@ export function bootYolkling() {
   /* ---------- CURSOR ---------- */
   function initCursor() {
     if (isTouch) return;
-    const cur = document.querySelector(".cursor");
-    const dot = cur.querySelector(".cursor-dot"), ring = cur.querySelector(".cursor-ring"), label = cur.querySelector(".cursor-label");
-    const q = (el, p, d) => gsap.quickTo(el, p, { duration: d, ease: "power3" });
-    const dx = q(dot, "x", 0.1), dy = q(dot, "y", 0.1), rx = q(ring, "x", 0.4), ry = q(ring, "y", 0.4), lx = q(label, "x", 0.4), ly = q(label, "y", 0.4);
-    window.addEventListener("mousemove", (e) => { dx(e.clientX); dy(e.clientY); rx(e.clientX); ry(e.clientY); lx(e.clientX); ly(e.clientY); });
-    document.querySelectorAll("a,button,[data-cursor],[data-magnetic],.creature").forEach((el) => {
-      el.addEventListener("mouseenter", () => { const l = el.getAttribute("data-cursor"); if (l) { cur.classList.add("is-label"); label.textContent = l; } else cur.classList.add("is-hover"); });
-      el.addEventListener("mouseleave", () => cur.classList.remove("is-hover", "is-label"));
-    });
     document.querySelectorAll("[data-magnetic]").forEach((el) => {
       const mx = gsap.quickTo(el, "x", { duration: 0.6, ease: "power3" }), my = gsap.quickTo(el, "y", { duration: 0.6, ease: "power3" });
       el.addEventListener("mousemove", (e) => { const r = el.getBoundingClientRect(); mx((e.clientX - (r.left + r.width / 2)) * 0.35); my((e.clientY - (r.top + r.height / 2)) * 0.35); });
       el.addEventListener("mouseleave", () => { mx(0); my(0); });
     });
   }
-
-  function initMarquee() { gsap.to(".marquee-track", { xPercent: -50, duration: 22, ease: "none", repeat: -1 }); }
 
   /* ---------- HATCH canvas ---------- */
   function initHatch() {
@@ -465,18 +458,31 @@ export function bootYolkling() {
     const nav = document.querySelector(".nav") as HTMLElement | null;
     const navOffset = () => (nav ? nav.getBoundingClientRect().height : 0) + 12;
 
+    // Full-screen pinned scenes start at the very top; everything else lands just under
+    // the floating nav. The offset lives here only: Lenis also honours CSS scroll-margin,
+    // and having both is what used to drop every section 165px too low.
+    const offsetFor = (el) => (el.matches(".hatch, .collection") ? 0 : navOffset());
+    const topOf = (el) => el.getBoundingClientRect().top + window.scrollY - offsetFor(el);
+
     function go(hash: string) {
       if (hash === "#top" || hash === "#") {
-        lenis ? lenis.scrollTo(0, { duration: 1.1 }) : window.scrollTo({ top: 0, behavior: "smooth" });
+        lenis ? (lenis.start(), lenis.scrollTo(0, { duration: 1.1, force: true })) : window.scrollTo({ top: 0, behavior: "smooth" });
         return;
       }
       const target = document.getElementById(hash.slice(1));
       if (!target) return;
+      // lazy images above the target can load mid-flight and shift it, so check where it
+      // actually ended up and nudge once if it moved
+      const settle = () => {
+        const drift = target.getBoundingClientRect().top - offsetFor(target);
+        if (Math.abs(drift) > 4) lenis ? lenis.scrollTo(topOf(target), { duration: 0.35, force: true }) : window.scrollTo({ top: topOf(target), behavior: "smooth" });
+      };
       if (lenis) {
-        lenis.scrollTo(target, { offset: -navOffset(), duration: 1.1 });
+        lenis.start();
+        lenis.scrollTo(topOf(target), { duration: 1.1, force: true, onComplete: settle });
       } else {
-        const top = target.getBoundingClientRect().top + window.scrollY - navOffset();
-        window.scrollTo({ top, behavior: "smooth" });
+        window.scrollTo({ top: topOf(target), behavior: "smooth" });
+        setTimeout(settle, 900);
       }
     }
 
@@ -492,15 +498,206 @@ export function bootYolkling() {
 
     // A direct link like yolkling.com/#collection: let layout/fonts settle, then land
     // accurately instead of trusting the browser's un-offset native jump.
+    // Wait for the preloader to finish and the pinned scenes to be measured (their spacers
+    // change every offset below them), otherwise a deep link lands short.
     if (location.hash) {
-      requestAnimationFrame(() => requestAnimationFrame(() => go(location.hash)));
+      if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+      window.addEventListener("yolk:ready", () => { ScrollTrigger.refresh(); requestAnimationFrame(() => go(location.hash)); }, { once: true });
     }
+  }
+
+  /* ---------- SCRATCH TO REVEAL ----------
+     Same beats as CardScratchView in the app: the card arrives face down, the back gives
+     the rarity away (commons get no dots), you scratch, and past 55% the rest clears and
+     the card turns over to its foil. Species and inks are the real ones from the catalog. */
+  // Real species, straight from SpeciesCatalog (colours, family, flavour, dex number),
+  // exported by rendering the app's own YolklingView. See app/yolkcard.ts for the card.
+  const SPECIES = [
+    {"name": "stardrop", "rarity": "common", "family": "celestial", "b": "#FBE6A8", "d": "#E7C25E", "line": "the cheerful first wish of the night", "no": 36, "of": 203},
+    {"name": "lilac comet", "rarity": "rare", "family": "celestial", "b": "#C9B8E8", "d": "#9A82C9", "line": "always arriving a little out of breath", "no": 18, "of": 203},
+    {"name": "ringling", "rarity": "epic", "family": "celestial", "b": "#BCCBE8", "d": "#8AA0CC", "line": "wears its own little rings, proudly", "no": 31, "of": 203},
+    {"name": "galaxia", "rarity": "legendary", "family": "celestial", "b": "#B098D0", "d": "#7E60AC", "line": "holds a whole tiny galaxy in its belly", "no": 15, "of": 203},
+    {"name": "moonpuff", "rarity": "common", "family": "celestial", "b": "#E8E2D2", "d": "#C2BAA6", "line": "naps through every sunrise on purpose", "no": 24, "of": 203},
+    {"name": "dusk plum", "rarity": "rare", "family": "celestial", "b": "#A99BCF", "d": "#7C6BA8", "line": "likes the quiet ten minutes after sunset", "no": 13, "of": 203},
+    {"name": "twinkleberry", "rarity": "common", "family": "celestial", "b": "#F4C6D6", "d": "#D98FAC", "line": "giggles in little sparkles when tickled", "no": 45, "of": 203},
+    {"name": "auroria", "rarity": "epic", "family": "celestial", "b": "#A7D8D0", "d": "#6FAFA8", "line": "shy, but glows softly when it is happy", "no": 3, "of": 203},
+    {"name": "sunkit", "rarity": "common", "family": "celestial", "b": "#FFD27A", "d": "#EAA63A", "line": "a small warm sunbeam in creature form", "no": 42, "of": 203},
+    {"name": "midnight bao", "rarity": "rare", "family": "celestial", "b": "#8E9BC4", "d": "#5E6B98", "line": "soft, round, and full of quiet midnight", "no": 22, "of": 203},
+    {"name": "dawnberry", "rarity": "common", "family": "celestial", "b": "#FBC9C0", "d": "#E8978E", "line": "the soft pink before the sun is fully up", "no": 11, "of": 203},
+    {"name": "cozmo", "rarity": "epic", "family": "celestial", "b": "#A6B8E0", "d": "#768CC4", "line": "a tiny gas giant with a very big heart", "no": 10, "of": 203},
+    {"name": "firstsnowcocoa", "rarity": "legendary", "family": "cozy", "b": "#8A5A3E", "d": "#5E3A26", "line": "the hush of a snowed-in day", "no": 69, "of": 203},
+  ];
+  const byName = (n) => SPECIES.find((s) => s.name === n);
+
+  /* ---------- TILE SEQUENCES ----------
+     A tile with data-cycle plays its real screens in order while it's on screen,
+     lighting up the matching step. */
+  function initTileCycles() {
+    document.querySelectorAll("[data-cycle]").forEach((tile) => {
+      const imgs = [...tile.querySelectorAll(".cyc-img")], steps = [...tile.querySelectorAll(".tile-steps li")];
+      if (imgs.length < 2 || reduced) return;
+      let i = 0, timer;
+      const show = (n) => { i = n; imgs.forEach((im, k) => im.classList.toggle("is-on", k === n)); steps.forEach((s, k) => s.classList.toggle("is-on", k === n)); };
+      steps.forEach((s, k) => s.addEventListener("click", () => show(k)));
+      new IntersectionObserver(([en]) => { clearInterval(timer); if (en.isIntersecting) timer = setInterval(() => show((i + 1) % imgs.length), 2600); }, { threshold: 0.4 }).observe(tile);
+    });
+  }
+
+  /* ---------- SHOP TABS ----------
+     Colours / Outfit / Room, like the app. Cycles on its own while in view until you tap. */
+  function initStore() {
+    const tabs = [...document.querySelectorAll(".seg-btn")];
+    if (!tabs.length) return;
+    const names = tabs.map((t) => (t as any).dataset.tab);
+    let cur = names.indexOf("outfit"), auto = true, timer;
+    function show(name) {
+      cur = names.indexOf(name);
+      tabs.forEach((t) => { const on = (t as any).dataset.tab === name; t.classList.toggle("is-on", on); t.setAttribute("aria-selected", String(on)); });
+      document.querySelectorAll(".store-cap").forEach((el) => el.classList.toggle("is-on", (el as any).dataset.cap === name));
+      document.querySelectorAll(".store-img").forEach((el) => el.classList.toggle("is-on", (el as any).dataset.img === name));
+    }
+    tabs.forEach((t) => t.addEventListener("click", () => { auto = false; clearInterval(timer); show((t as any).dataset.tab); }));
+    if (reduced) return;
+    new IntersectionObserver(([en]) => { clearInterval(timer); if (en.isIntersecting && auto) timer = setInterval(() => show(names[(cur + 1) % names.length]), 4200); }, { threshold: 0.4 }).observe(document.querySelector(".store-wrap"));
+  }
+
+  /* ---------- SECTION EGGS ----------
+     Section labels are an egg that hatches as you go down the page:
+     0 whole, 1 hairline crack, 2 cracked through, 3 lid lifting, 4 hatched. */
+  function initSectionEggs() {
+    const SHELL = "M20 2C30 2 37 18 37 30C37 40 29 46 20 46C11 46 3 40 3 30C3 18 10 2 20 2Z";
+    const BOTTOM = "M3 29C3 40 11 46 20 46C29 46 37 40 37 29L32 25L27 30L20 24L13 30L8 25Z";
+    const TOP = "M3 29L8 25L13 30L20 24L27 30L32 25L37 29C37 17 30 2 20 2C10 2 3 17 3 29Z";
+    const face = (cx, cy) => `<circle class="eye" cx="${cx - 4}" cy="${cy}" r="1.7"/><circle class="eye" cx="${cx + 4}" cy="${cy}" r="1.7"/><path class="smile" d="M${cx - 3} ${cy + 4}Q${cx} ${cy + 6.5} ${cx + 3} ${cy + 4}"/>`;
+    const ART = [
+      `<path class="shell" d="${SHELL}"/>`,
+      `<path class="shell" d="${SHELL}"/><path class="crack" d="M21 12L17 18L22 21"/>`,
+      `<path class="shell" d="${SHELL}"/><path class="crack" d="M3.5 28L8 24L13 29L20 23L27 29L32 24L36.5 28"/>`,
+      `<circle class="yolk" cx="20" cy="27" r="11"/>${face(20, 25)}<path class="shell" d="${BOTTOM}"/><path class="shell" d="${TOP}" transform="translate(-3 -9) rotate(-16 20 20)"/>`,
+      `<circle class="yolk" cx="20" cy="22" r="12.5"/>${face(20, 20)}<path class="shell" d="${BOTTOM}"/><path class="spark" d="M37 4l1.2 3 3 1.2-3 1.2L37 12.4l-1.2-3-3-1.2 3-1.2z"/>`,
+    ];
+    document.querySelectorAll(".sh").forEach((el) => {
+      const egg = el.querySelector(".sh-egg");
+      const n = Math.max(0, Math.min(4, Number((el as any).dataset.hatch) || 0));
+      egg.innerHTML = `<svg viewBox="0 -8 42 56" aria-hidden="true">${ART[n]}</svg>`;
+      if (reduced) return;
+      // a little wobble when it scrolls in, harder the closer it is to hatching
+      gsap.fromTo(egg, { rotation: 0 }, { keyframes: { rotation: [0, -8 - n * 2, 7 + n * 2, -4, 0] }, duration: 0.7, ease: "sine.inOut", transformOrigin: "50% 90%", scrollTrigger: { trigger: el, start: "top 85%" } });
+    });
+  }
+
+  function initHeroField() {
+    const rows = [document.getElementById("hsRow1"), document.getElementById("hsRow2")];
+    if (!rows[0]) return;
+    const pool = SPECIES;
+    rows.forEach((row, r) => {
+      const order = pool.map((_, k) => pool[r ? (pool.length - 1 - ((k * 3 + 4) % pool.length)) : (k * 5) % pool.length]);
+      const html = order.map((s) => `<div class="hs-card">${cardFront(s)}</div>`).join("");
+      row.innerHTML = html + html; // doubled so the drift loops seamlessly
+      // grid cards in the app are frozen at the flattering `posed` angle, flat
+      row.querySelectorAll(".yc").forEach((el) => setPose(el, POSED, POSED, false));
+    });
+  }
+
+  /* ---------- SCRATCH TO REVEAL ----------
+     CardScratchView: face down, the back gives the rarity away (commons get no dots),
+     a 46u brush over a 10×14 coverage grid, and past 55% the panel clears (0.22s) and
+     the card turns over with a spring. Then it tilts: the card follows you, the foil lags. */
+  function initScratch() {
+    const root = document.getElementById("scratch");
+    if (!root) return;
+    const flip = document.getElementById("scFlip"), front = document.getElementById("scFront");
+    const canvas = document.getElementById("scBack") as HTMLCanvasElement, hintEl = document.getElementById("scPanelHint");
+    const hint = document.getElementById("scHint"), skip = document.getElementById("scSkip"), next = document.getElementById("scNext");
+    const ctx = canvas.getContext("2d");
+    const DECK = ["stardrop", "lilac comet", "ringling", "galaxia"].map(byName);
+    const COLS = 10, ROWS = 14, THRESHOLD = 0.55;
+    let i = 0, done = false, live = false, last = null, cells = new Set(), yc = null;
+
+    function deal() {
+      const s = DECK[i % DECK.length];
+      done = false; live = false; cells = new Set(); last = null;
+      front.innerHTML = cardFront(s); yc = front.querySelector(".yc");
+      setPose(yc, { x: 0, y: 0 }, { x: 0, y: 0 });
+      gsap.set(flip, { rotationY: 0 }); gsap.set(front, { rotationY: 0 });
+      gsap.set(canvas, { opacity: 1, display: "block" }); hintEl.classList.remove("is-gone");
+      paintBack(canvas, s.rarity);
+      hint.textContent = i === 0 ? "scratch the card to see who you got" : s.rarity === "common" ? "no dots on the back. probably a common" : "dots on the back. this one's rare or better";
+      (skip as any).hidden = false; (next as any).hidden = true;
+    }
+
+    const size = () => canvas.getBoundingClientRect();
+    function mark(x, y, w, h) {
+      const cw = w / COLS, ch = h / ROWS, r = (46 * w) / 300 / 2;
+      for (let cy = Math.max(0, ((y - r) / ch) | 0); cy <= Math.min(ROWS - 1, ((y + r) / ch) | 0); cy++)
+        for (let cx = Math.max(0, ((x - r) / cw) | 0); cx <= Math.min(COLS - 1, ((x + r) / cw) | 0); cx++)
+          if (Math.hypot((cx + 0.5) * cw - x, (cy + 0.5) * ch - y) <= r) cells.add(cy * COLS + cx);
+    }
+    function scratch(x, y) {
+      const { width: w, height: h } = size();
+      hintEl.classList.add("is-gone");
+      ctx.globalCompositeOperation = "destination-out";
+      ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.lineWidth = (46 * w) / 300;
+      ctx.beginPath(); ctx.moveTo(last ? last.x : x, last ? last.y : y); ctx.lineTo(x + 0.01, y); ctx.stroke();
+      if (last) { const n = Math.ceil(Math.hypot(x - last.x, y - last.y) / 6); for (let k = 1; k <= n; k++) mark(last.x + ((x - last.x) * k) / n, last.y + ((y - last.y) * k) / n, w, h); }
+      else mark(x, y, w, h);
+      last = { x, y };
+      if (cells.size / (COLS * ROWS) >= THRESHOLD) reveal();
+    }
+
+    function reveal() {
+      if (done) return; done = true; last = null;
+      const s = DECK[i % DECK.length];
+      hint.textContent = `${s.rarity} · ${({ common: "pearl", rare: "holo", epic: "prism", legendary: "cosmos" })[s.rarity]} foil. move over it to catch the light`;
+      (skip as any).hidden = true; (next as any).hidden = false;
+      const goLive = () => { live = true; };
+      hintEl.classList.add("is-gone");
+      // clear the last of the panel, THEN turn it over. overlapping reads as a glitch.
+      gsap.to(canvas, { opacity: 0, duration: 0.22, ease: "power1.out", onComplete: () => gsap.set(canvas, { display: "none" }) });
+      if (reduced) return goLive();
+      const f = { v: 0 };
+      gsap.to(f, { v: 1, duration: 0.7, delay: 0.14, ease: "back.out(1.5)", onUpdate: () => {
+        // the second half would show the card mirrored, so counter-rotate past halfway
+        gsap.set(flip, { rotationY: f.v * 180 }); gsap.set(front, { rotationY: f.v >= 0.5 ? 180 : 0 });
+      }, onComplete: () => { gsap.set(flip, { rotationY: 0 }); gsap.set(front, { rotationY: 0 }); goLive(); } });
+    }
+
+    const pos = (e) => { const r = size(); return { x: e.clientX - r.left, y: e.clientY - r.top }; };
+    canvas.addEventListener("pointerdown", (e) => { if (done) return; canvas.setPointerCapture(e.pointerId); last = null; const p = pos(e); scratch(p.x, p.y); });
+    canvas.addEventListener("pointermove", (e) => { if (done || !canvas.hasPointerCapture(e.pointerId)) return; const p = pos(e); scratch(p.x, p.y); });
+    canvas.addEventListener("pointerup", () => { last = null; });
+    skip.addEventListener("click", reveal);
+    next.addEventListener("click", () => { i++; deal(); });
+
+    // CardTilt: the card follows the pointer quickly, the foil sheet lags behind it (laminate
+    // has mass). With no pointer it breathes around the posed angle, like the gyro at rest.
+    const pose = { x: 0, y: 0 }, sheet = { x: 0, y: 0 }; let target = null, onScreen = false;
+    front.addEventListener("pointermove", (e) => {
+      const r = front.getBoundingClientRect();
+      target = { x: Math.max(-1, Math.min(1, ((e.clientX - r.left) / r.width) * 2 - 1)), y: Math.max(-1, Math.min(1, ((e.clientY - r.top) / r.height) * 2 - 1)) };
+    });
+    front.addEventListener("pointerleave", () => { target = null; });
+    new IntersectionObserver(([en]) => { onScreen = en.isIntersecting; }).observe(root);
+    if (!reduced) gsap.ticker.add((t) => {
+      if (!live || !onScreen || !yc) return;
+      const tg = target || { x: POSED.x + Math.sin(t * 0.6) * 0.35, y: POSED.y + Math.cos(t * 0.45) * 0.25 };
+      pose.x += (tg.x - pose.x) * 0.22; pose.y += (tg.y - pose.y) * 0.22;
+      sheet.x += (pose.x - sheet.x) * 0.08; sheet.y += (pose.y - sheet.y) * 0.08;
+      setPose(yc, pose, sheet);
+    });
+
+    let rt; window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { if (!done) { cells = new Set(); paintBack(canvas, DECK[i % DECK.length].rarity); } }, 200); });
+    document.fonts ? document.fonts.ready.then(deal) : deal();
   }
 
   captureUtm();
   runPreloader();
+  initScratch();
+  initHeroField();
+  initSectionEggs();
+  initStore();
+  initTileCycles();
   initCursor();
-  initMarquee();
   initHatch();
   initStickyCards();
   initStatement();
