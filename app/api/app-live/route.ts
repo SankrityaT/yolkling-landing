@@ -10,9 +10,19 @@ export const revalidate = 300;
 
 export async function GET() {
   try {
-    const r = await fetch(`https://itunes.apple.com/lookup?id=${APP_ID}&country=us`, { next: { revalidate: 300 } });
-    const j = await r.json();
-    const hit = (j?.results ?? []).find((x: { bundleId?: string }) => x.bundleId === BUNDLE_ID);
+    // The US storefront lookup lags the others by hours after a release (on launch night the
+    // app was downloadable, and listed in GB, IN and the global bundleId lookup, while the US
+    // lookup still returned nothing). So ask both and take whichever answers first.
+    const urls = [
+      `https://itunes.apple.com/lookup?id=${APP_ID}&country=us`,
+      `https://itunes.apple.com/lookup?bundleId=${BUNDLE_ID}`,
+    ];
+    let hit: { bundleId?: string; trackViewUrl?: string } | undefined;
+    for (const u of urls) {
+      const j = await (await fetch(u, { next: { revalidate: 300 } })).json();
+      hit = (j?.results ?? []).find((x: { bundleId?: string }) => x.bundleId === BUNDLE_ID);
+      if (hit) break;
+    }
     return NextResponse.json({ live: Boolean(hit), url: hit?.trackViewUrl ?? null }, { headers: { "Cache-Control": "public, s-maxage=300, stale-while-revalidate=600" } });
   } catch {
     return NextResponse.json({ live: false, url: null });
