@@ -15,7 +15,6 @@ export const BODY = `
       <a href="#how" data-cursor="">How</a>
       <a href="#collection" data-cursor="">Creatures</a>
       <a href="#cards" data-cursor="">Cards</a>
-      <a href="#feedback" data-cursor="">Say hi</a>
     </div>
     <div class="nav-right">
       <a href="#top" class="btn-pill when-wl" data-magnetic data-cursor="join"><span>Join waitlist</span></a>
@@ -33,7 +32,6 @@ export const BODY = `
         <a href="#how" class="menu-link">How it works</a>
         <a href="#collection" class="menu-link">Creatures</a>
         <a href="#cards" class="menu-link">Cards</a>
-        <a href="#feedback" class="menu-link">Say hi</a>
       </div>
       <div class="menu-foot mono">
         <p>made with snacks and feelings</p>
@@ -219,7 +217,7 @@ export const BODY = `
       <div class="stmt-reveal">
         <p class="mono">[ 04 / the twist ]</p>
         <h3>the only app on earth that wants you<br/>to <span class="wob3">put your phone down.</span></h3>
-        <p class="stmt-sub">scroll all night and he just gets sleepy, and waits for you.<br/>no sickness, no streak funerals, no guilt. miss a week and coming back feels like coming home.</p>
+        <p class="stmt-sub">scroll all night and he just gets sleepy, and waits for you.<br/>no sickness, no guilt. miss a week and coming back feels like coming home.</p>
       </div>
     </div>
   </section>
@@ -294,23 +292,6 @@ export const BODY = `
     </div>
   </section>
 
-  <section class="feedback" id="feedback">
-    <div class="section-head"><span class="sh" data-hatch="4"><i class="sh-egg" aria-hidden="true"></i><span class="sh-label">tell me what you think</span></span></div>
-    <div class="fb-wrap">
-      <h2 class="big-h">would you actually use this?</h2>
-      <p class="fb-sub">be honest. what would make you or a friend pay a couple bucks for it. what's missing. i'm one person building this and your note genuinely helps me decide what to do next.</p>
-      <form class="fb-form" id="fbForm" novalidate>
-        <input id="fbName" class="wl-input" placeholder="your name (optional)" />
-        <textarea id="fbMsg" class="fb-textarea" rows="4" placeholder="what do you think? would you use it?"></textarea>
-        <button type="submit" class="btn-primary" data-magnetic data-cursor="send"><span>send it</span><i>→</i></button>
-      </form>
-      <div class="fb-done" id="fbDone" hidden>
-        <p class="wl-done-h">thank you, really.</p>
-        <p class="wl-done-sub">i read every note myself. this is the stuff that tells me whether to keep going.</p>
-      </div>
-    </div>
-  </section>
-
   <section class="pricing" id="pricing">
     <div class="section-head"><span class="sh" data-hatch="4"><i class="sh-egg" aria-hidden="true"></i><span class="sh-label">when we hatch</span></span></div>
     <h2 class="big-h pricing-h">free to hatch.<br/>always will be.</h2>
@@ -340,8 +321,8 @@ export const BODY = `
     <button class="btn-primary btn-xl when-wl" id="outroJoin" data-magnetic data-cursor="join"><span>Join the waitlist</span><i>→</i></button><a class="btn-primary btn-xl when-live" href="__APP_STORE__" data-magnetic><span>Get the app</span><i>→</i></a>
     <div class="footer">
       <div class="footer-col"><span class="brand">yolkling</span><p class="mono">the little guy who's secretly you.</p></div>
-      <div class="footer-col mono"><a href="#hatch">Hatch</a><a href="#how">How</a><a href="#collection">Creatures</a><a href="#feedback">Say hi</a></div>
-      <div class="footer-col mono"><a href="/support">support</a><a href="/press">press</a><a href="/privacy">privacy</a><a href="/terms">terms</a><a href="#feedback">say hi</a></div>
+      <div class="footer-col mono"><a href="#hatch">Hatch</a><a href="#how">How</a><a href="#collection">Creatures</a><a href="#cards">Cards</a></div>
+      <div class="footer-col mono"><a href="/support">support</a><a href="/press">press</a><a href="/privacy">privacy</a><a href="/terms">terms</a></div>
       <div class="footer-col mono footer-status"><p class="live when-wl">● <span id="footLive">early access is open</span></p><p class="live when-live">● out now on the App Store</p><p>made by one person, with snacks and feelings</p><p>© 2026, please drink water</p></div>
     </div>
     <p class="footer-legal">Apple, the Apple logo, iPhone and Apple Health are trademarks of Apple Inc., registered in the U.S. and other countries. App Store is a service mark of Apple Inc. Tamagotchi is a trademark of Bandai. Yolkling is not affiliated with Apple or Bandai.</p>
