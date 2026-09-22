@@ -1,14 +1,19 @@
-// Google Ads API adapter (REST interface, no client library). Same scope note as the
-// Meta adapter: this creates a campaign budget + campaign object and reads its spend.
-// Ad groups, keywords, and ads (the layer that actually shows something to someone)
-// come once real keyword/copy decisions are made, not faked here. A campaign with no
-// ad group under it spends nothing.
+// Google Ads API adapter (REST interface, no client library).
+//
+// createCampaign builds the full serving chain in one call: budget, campaign, geo +
+// language targeting, ad group, keywords (phrase match), and a Responsive Search Ad
+// with the final URL (UTM params included, built by the caller). That's the whole
+// resource graph Google needs before a real person can see this.
+//
+// Known geo target constants (Google's fixed IDs, not ours):
+//   US = 2840, Japan = 2392. Language constants: English = 1000, Japanese = 1005.
 
-// Google Ads API versions sunset roughly every 6-9 months; v17 was already gone
-// (404) and v20 already blocked as of 2026-08. Confirmed v21 live via a real
-// listAccessibleCustomers call. Re-check this if createCampaign starts failing
-// with UNSUPPORTED_VERSION.
-const API_VERSION = "v21";
+// Google Ads API versions sunset fast and without much warning: v17 was already
+// gone, v20 got blocked, and even v21 (confirmed live on 2026-08-09) was a 404 by
+// 2026-08-22, two weeks later. Confirmed v25 live via a real listAccessibleCustomers
+// + campaignBudgets:mutate call. If createCampaign starts failing with
+// UNSUPPORTED_VERSION or a plain 404, this is the first thing to re-check.
+const API_VERSION = "v25";
 
 function requireConfig() {
   const clientId = process.env.GOOGLE_ADS_CLIENT_ID;
@@ -71,28 +76,42 @@ async function adsFetch(path: string, init: RequestInit = {}) {
 export async function createCampaign(input: {
   name: string;
   dailyBudgetCents: number;
-}): Promise<{ externalCampaignId: string }> {
-  const micros = input.dailyBudgetCents * 10_000; // cents -> micros (1 unit = 1,000,000 micros)
+  keywords: string[];
+  headlines: string[]; // 3-15, each <= 30 chars
+  descriptions: string[]; // 2-4, each <= 90 chars
+  finalUrl: string;
+  geoTargetConstant: string; // e.g. "2840" (US) or "2392" (Japan)
+  languageConstant?: string; // default "1000" (English)
+  validateOnly?: boolean; // dry-run: builds every request, persists nothing
+}): Promise<{ externalCampaignId: string; adGroupId: string; validated: boolean }> {
+  const { customerId } = requireConfig();
+  const validateOnly = Boolean(input.validateOnly);
 
   const budgetRes = await adsFetch(`/campaignBudgets:mutate`, {
     method: "POST",
     body: JSON.stringify({
+      validateOnly,
       operations: [
         {
           create: {
             name: `${input.name} budget`,
-            amountMicros: String(micros),
+            amountMicros: String(input.dailyBudgetCents * 10_000),
             deliveryMethod: "STANDARD",
           },
         },
       ],
     }),
   });
-  const budgetResourceName = budgetRes.results[0].resourceName;
+  // In validateOnly mode Google returns no resourceName (nothing was created), so
+  // every downstream step uses a placeholder resource name instead of a real one.
+  const budgetResourceName = validateOnly
+    ? `customers/${customerId}/campaignBudgets/0`
+    : budgetRes.results[0].resourceName;
 
   const campaignRes = await adsFetch(`/campaigns:mutate`, {
     method: "POST",
     body: JSON.stringify({
+      validateOnly,
       operations: [
         {
           create: {
@@ -107,9 +126,91 @@ export async function createCampaign(input: {
       ],
     }),
   });
-  const resourceName: string = campaignRes.results[0].resourceName; // "customers/{id}/campaigns/{campaignId}"
-  const externalCampaignId = resourceName.split("/").pop()!;
-  return { externalCampaignId };
+  const campaignResourceName: string = validateOnly
+    ? `customers/${customerId}/campaigns/0`
+    : campaignRes.results[0].resourceName;
+  const externalCampaignId = campaignResourceName.split("/").pop()!;
+
+  // Geo + language targeting on the campaign itself.
+  await adsFetch(`/campaignCriteria:mutate`, {
+    method: "POST",
+    body: JSON.stringify({
+      validateOnly,
+      operations: [
+        {
+          create: {
+            campaign: campaignResourceName,
+            location: { geoTargetConstant: `geoTargetConstants/${input.geoTargetConstant}` },
+          },
+        },
+        {
+          create: {
+            campaign: campaignResourceName,
+            language: { languageConstant: `languageConstants/${input.languageConstant ?? "1000"}` },
+          },
+        },
+      ],
+    }),
+  });
+
+  const adGroupRes = await adsFetch(`/adGroups:mutate`, {
+    method: "POST",
+    body: JSON.stringify({
+      validateOnly,
+      operations: [
+        {
+          create: {
+            name: `${input.name} ad group`,
+            campaign: campaignResourceName,
+            status: "ENABLED",
+            type: "SEARCH_STANDARD",
+          },
+        },
+      ],
+    }),
+  });
+  const adGroupResourceName: string = validateOnly
+    ? `customers/${customerId}/adGroups/0`
+    : adGroupRes.results[0].resourceName;
+  const adGroupId = adGroupResourceName.split("/").pop()!;
+
+  await adsFetch(`/adGroupCriteria:mutate`, {
+    method: "POST",
+    body: JSON.stringify({
+      validateOnly,
+      operations: input.keywords.map((text) => ({
+        create: {
+          adGroup: adGroupResourceName,
+          status: "ENABLED",
+          keyword: { text, matchType: "PHRASE" },
+        },
+      })),
+    }),
+  });
+
+  await adsFetch(`/adGroupAds:mutate`, {
+    method: "POST",
+    body: JSON.stringify({
+      validateOnly,
+      operations: [
+        {
+          create: {
+            adGroup: adGroupResourceName,
+            status: "ENABLED",
+            ad: {
+              finalUrls: [input.finalUrl],
+              responsiveSearchAd: {
+                headlines: input.headlines.map((text) => ({ text })),
+                descriptions: input.descriptions.map((text) => ({ text })),
+              },
+            },
+          },
+        },
+      ],
+    }),
+  });
+
+  return { externalCampaignId, adGroupId, validated: validateOnly };
 }
 
 export async function pauseCampaign(externalCampaignId: string): Promise<void> {

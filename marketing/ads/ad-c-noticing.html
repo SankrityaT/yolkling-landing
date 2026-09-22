@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Yolkling ad — take care, they notice</title>
+<meta name="hz:slide-selector" content=".ad-square" />
+<meta name="hz:canvas-width" content="1080" />
+<meta name="hz:canvas-height" content="1080" />
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Onest:wght@700;800;900&family=DM+Sans:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { display: flex; justify-content: center; align-items: center; min-height: 100vh; background: #e9e2d3; }
+
+  .ad-square {
+    position: relative;
+    width: 1080px;
+    height: 1080px;
+    overflow: hidden;
+    background: radial-gradient(120% 120% at 50% 100%, #FFE0C2 0%, #F4EAD6 55%, #FBF6EC 100%);
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .bg-photo {
+    position: absolute;
+    inset: 0;
+    background-image: url('./bg-noticing.jpg');
+    background-size: cover;
+    background-position: center;
+    opacity: .85;
+  }
+
+  .bg-scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(251,246,236,.5) 0%, rgba(251,246,236,.05) 34%, rgba(251,246,236,.1) 60%, rgba(42,36,27,.68) 100%);
+  }
+
+  .brand-pill {
+    position: absolute;
+    top: 48px;
+    left: 48px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(251,246,236,.94);
+    padding: 10px 22px 10px 12px;
+    border-radius: 999px;
+    box-shadow: 0 4px 16px rgba(42,36,27,.16);
+  }
+  .brand-pill svg { width: 34px; height: 34px; display: block; }
+  .brand-pill span {
+    font-family: 'Onest', sans-serif;
+    font-weight: 800;
+    font-size: 22px;
+    letter-spacing: -.01em;
+    color: #2A241B;
+  }
+
+  .headline {
+    position: absolute;
+    top: 138px;
+    left: 48px;
+    font-family: 'Onest', sans-serif;
+    font-weight: 800;
+    font-size: 96px;
+    line-height: .96;
+    letter-spacing: -.03em;
+    color: #2A241B;
+  }
+  .headline .accent { color: #FF94C2; }
+
+  .creature-frame {
+    position: absolute;
+    left: 50%;
+    top: 468px;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 372px;
+    border-radius: 32px;
+    overflow: hidden;
+    background: #FBF6EC;
+    box-shadow: 0 24px 64px rgba(42,36,27,.2);
+  }
+  .creature-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 23%;
+    display: block;
+  }
+
+  .subhead-pill {
+    position: absolute;
+    left: 48px;
+    top: 952px;
+    max-width: 560px;
+    background: rgba(42,36,27,.9);
+    color: #FBF6EC;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 400;
+    font-size: 27px;
+    line-height: 1.4;
+    padding: 20px 26px;
+    border-radius: 18px;
+  }
+
+  .cta-pill {
+    position: absolute;
+    right: 48px;
+    bottom: 48px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #FBF6EC;
+    color: #2A241B;
+    font-family: 'Onest', sans-serif;
+    font-weight: 700;
+    font-size: 27px;
+    padding: 20px 30px;
+    border-radius: 999px;
+    box-shadow: 0 8px 24px rgba(42,36,27,.28);
+  }
+</style>
+</head>
+<body>
+  <div class="ad-square" data-canvas-width="1080" data-canvas-height="1080">
+    <div class="bg-photo"></div>
+    <div class="bg-scrim"></div>
+
+    <div class="brand-pill">
+      <svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="16" fill="#FFC23B"/><path d="M10 14c1-2 3-2 3.5 0" stroke="#2A241B" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M18.5 14c1-2 3-2 3.5 0" stroke="#2A241B" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M12 20c1.5 1.6 6.5 1.6 8 0" stroke="#2A241B" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+      <span>yolkling</span>
+    </div>
+
+    <div class="headline">take care.<br/>they <span class="accent">notice.</span></div>
+
+    <div class="creature-frame">
+      <img src="../../public/shots/home.png" alt="the yolkling creature at home" />
+    </div>
+
+    <div class="subhead-pill">grows from real sleep and steps. trade what you earn with friends.</div>
+
+    <div class="cta-pill">
+      meet your yolkling
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10h12M11 5l5 5-5 5" stroke="#2A241B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+  </div>
+</body>
+</html>

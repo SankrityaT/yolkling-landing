@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import "./ads.css";
+import "./ops.css";
 
 type Campaign = {
   id: string;
@@ -35,16 +35,16 @@ export default function AdsDashboard() {
   const [form, setForm] = useState({ platform: "meta" as "meta" | "google", hook: "", utmCampaign: "", dailyBudgetDollars: "5" });
 
   useEffect(() => {
-    const stored = localStorage.getItem("yolk_ads_key");
+    const stored = localStorage.getItem("yolk_ops_key");
     if (stored) setKey(stored);
   }, []);
 
   async function load(k: string) {
     setError(null);
-    const res = await fetch("/api/ads/summary", { headers: { "x-ads-key": k } });
+    const res = await fetch("/api/ops/summary", { headers: { "x-ads-key": k } });
     if (res.status === 401) {
       setError("wrong key");
-      localStorage.removeItem("yolk_ads_key");
+      localStorage.removeItem("yolk_ops_key");
       setKey(null);
       return;
     }
@@ -59,7 +59,7 @@ export default function AdsDashboard() {
 
   function submitKey(e: React.FormEvent) {
     e.preventDefault();
-    localStorage.setItem("yolk_ads_key", keyInput);
+    localStorage.setItem("yolk_ops_key", keyInput);
     setKey(keyInput);
   }
 
@@ -69,7 +69,7 @@ export default function AdsDashboard() {
     setBusy(true);
     setError(null);
     try {
-      const res = await fetch("/api/ads/campaigns", {
+      const res = await fetch("/api/ops/campaigns", {
         method: "POST",
         headers: { "Content-Type": "application/json", "x-ads-key": key },
         body: JSON.stringify({
@@ -92,7 +92,7 @@ export default function AdsDashboard() {
     if (!key) return;
     setBusy(true);
     try {
-      await fetch(`/api/ads/campaigns/${id}/pause`, { method: "POST", headers: { "x-ads-key": key } });
+      await fetch(`/api/ops/campaigns/${id}/pause`, { method: "POST", headers: { "x-ads-key": key } });
       await load(key);
     } finally {
       setBusy(false);
@@ -104,7 +104,7 @@ export default function AdsDashboard() {
     if (!confirm("pause every active campaign on every platform?")) return;
     setBusy(true);
     try {
-      await fetch("/api/ads/kill-switch", { method: "POST", headers: { "x-ads-key": key } });
+      await fetch("/api/ops/kill-switch", { method: "POST", headers: { "x-ads-key": key } });
       await load(key);
     } finally {
       setBusy(false);
@@ -113,24 +113,24 @@ export default function AdsDashboard() {
 
   if (!key) {
     return (
-      <div className="ads">
-        <div className="ads-gate">
-          <div className="ads-gate-card">
-            <div className="ads-gate-icon" />
-            <div className="ads-eyebrow" style={{ marginBottom: 6 }}>internal</div>
-            <div className="ads-gate-title">ads console</div>
-            <div className="ads-gate-sub">enter the key to see spend, campaigns, and UTM attribution.</div>
+      <div className="ops">
+        <div className="ops-gate">
+          <div className="ops-gate-card">
+            <div className="ops-gate-icon" />
+            <div className="ops-eyebrow" style={{ marginBottom: 6 }}>internal</div>
+            <div className="ops-gate-title">ops console</div>
+            <div className="ops-gate-sub">enter the key to see spend, campaigns, and UTM attribution.</div>
             <form onSubmit={submitKey}>
-              {error && <p className="ads-error">{error}</p>}
+              {error && <p className="ops-error">{error}</p>}
               <input
                 type="password"
-                placeholder="ADS_API_KEY"
+                placeholder="access key"
                 value={keyInput}
                 onChange={(e) => setKeyInput(e.target.value)}
-                className="ads-input"
+                className="ops-input"
                 autoFocus
               />
-              <button type="submit" className="ads-btn ads-btn-primary ads-btn-block">enter</button>
+              <button type="submit" className="ops-btn ops-btn-primary ops-btn-block">enter</button>
             </form>
           </div>
         </div>
@@ -144,66 +144,66 @@ export default function AdsDashboard() {
   const maxSignups = Math.max(1, ...(summary?.utmBreakdown.map((r) => r.signups) ?? [1]));
 
   return (
-    <div className="ads">
-      <div className="ads-topbar">
-        <div className="ads-brand">
-          <div className="ads-brand-dot" />
-          <div className="ads-brand-text">yolkling <span>ads</span></div>
+    <div className="ops">
+      <div className="ops-topbar">
+        <div className="ops-brand">
+          <div className="ops-brand-dot" />
+          <div className="ops-brand-text">yolkling <span>ops</span></div>
         </div>
-        <button onClick={killSwitch} disabled={busy || !summary} className="ads-btn ads-btn-danger">
+        <button onClick={killSwitch} disabled={busy || !summary} className="ops-btn ops-btn-danger">
           pause everything
         </button>
       </div>
 
-      <div className="ads-body">
-        {error && <p className="ads-error">{error}</p>}
+      <div className="ops-body">
+        {error && <p className="ops-error">{error}</p>}
 
         {summary && (
           <>
-            <section className="ads-hero">
-              <div className="ads-hero-spend">
-                <div className="ads-eyebrow">lifetime spend</div>
-                <div className="ads-hero-amount">
+            <section className="ops-hero">
+              <div className="ops-hero-spend">
+                <div className="ops-eyebrow">lifetime spend</div>
+                <div className="ops-hero-amount">
                   {dollars(summary.totalObservedSpentCents)} <span>/ {dollars(summary.caps.lifetimeSpendCentsCap)}</span>
                 </div>
-                <div className="ads-progress-track">
-                  <div className="ads-progress-fill" style={{ width: `${spentPct}%` }} />
+                <div className="ops-progress-track">
+                  <div className="ops-progress-fill" style={{ width: `${spentPct}%` }} />
                 </div>
-                <div className="ads-hero-cap">{dollars(summary.caps.dailyBudgetCentsCap)}/day hard cap, per platform</div>
+                <div className="ops-hero-cap">{dollars(summary.caps.dailyBudgetCentsCap)}/day hard cap, per platform</div>
               </div>
-              <div className="ads-hero-stats">
-                <div className="ads-stat">
-                  <div className="ads-stat-num">{activeCount}</div>
-                  <div className="ads-stat-label">active</div>
+              <div className="ops-hero-stats">
+                <div className="ops-stat">
+                  <div className="ops-stat-num">{activeCount}</div>
+                  <div className="ops-stat-label">active</div>
                 </div>
-                <div className="ads-stat">
-                  <div className="ads-stat-num">{summary.campaigns.length}</div>
-                  <div className="ads-stat-label">campaigns</div>
+                <div className="ops-stat">
+                  <div className="ops-stat-num">{summary.campaigns.length}</div>
+                  <div className="ops-stat-label">campaigns</div>
                 </div>
-                <div className="ads-stat">
-                  <div className="ads-stat-num">{totalSignups}</div>
-                  <div className="ads-stat-label">tagged signups</div>
+                <div className="ops-stat">
+                  <div className="ops-stat-num">{totalSignups}</div>
+                  <div className="ops-stat-label">tagged signups</div>
                 </div>
               </div>
             </section>
 
-            <section className="ads-card">
-              <div className="ads-card-title">launch a campaign</div>
-              <div className="ads-segmented">
+            <section className="ops-card">
+              <div className="ops-card-title">launch a campaign</div>
+              <div className="ops-segmented">
                 <button type="button" className={form.platform === "meta" ? "is-active" : ""} onClick={() => setForm({ ...form, platform: "meta" })}>meta</button>
                 <button type="button" className={form.platform === "google" ? "is-active" : ""} onClick={() => setForm({ ...form, platform: "google" })}>google</button>
               </div>
-              <form onSubmit={createCampaign} className="ads-form-grid">
-                <input placeholder="hook, e.g. contrast" value={form.hook} onChange={(e) => setForm({ ...form, hook: e.target.value })} className="ads-input" required />
-                <input placeholder="utm campaign id" value={form.utmCampaign} onChange={(e) => setForm({ ...form, utmCampaign: e.target.value })} className="ads-input" required />
-                <input placeholder="daily budget $" value={form.dailyBudgetDollars} onChange={(e) => setForm({ ...form, dailyBudgetDollars: e.target.value })} className="ads-input" required />
-                <button type="submit" disabled={busy} className="ads-btn ads-btn-primary">create + launch</button>
+              <form onSubmit={createCampaign} className="ops-form-grid">
+                <input placeholder="hook, e.g. contrast" value={form.hook} onChange={(e) => setForm({ ...form, hook: e.target.value })} className="ops-input" required />
+                <input placeholder="utm campaign id" value={form.utmCampaign} onChange={(e) => setForm({ ...form, utmCampaign: e.target.value })} className="ops-input" required />
+                <input placeholder="daily budget $" value={form.dailyBudgetDollars} onChange={(e) => setForm({ ...form, dailyBudgetDollars: e.target.value })} className="ops-input" required />
+                <button type="submit" disabled={busy} className="ops-btn ops-btn-primary">create + launch</button>
               </form>
             </section>
 
-            <section className="ads-card">
-              <div className="ads-card-title">campaigns</div>
-              <table className="ads-table">
+            <section className="ops-card">
+              <div className="ops-card-title">campaigns</div>
+              <table className="ops-table">
                 <thead>
                   <tr>
                     <th>platform</th>
@@ -222,28 +222,28 @@ export default function AdsDashboard() {
                       <td>{c.utm_campaign}</td>
                       <td>{dollars(c.daily_budget_cents)}</td>
                       <td>
-                        <span className={`ads-status ads-status-${c.status}`} title={c.status_detail || ""}>
-                          <span className="ads-status-dot" />
+                        <span className={`ops-status ops-status-${c.status}`} title={c.status_detail || ""}>
+                          <span className="ops-status-dot" />
                           {c.status}
                         </span>
                       </td>
                       <td>
                         {c.status === "active" && (
-                          <button onClick={() => pause(c.id)} disabled={busy} className="ads-pause-btn">pause</button>
+                          <button onClick={() => pause(c.id)} disabled={busy} className="ops-pause-btn">pause</button>
                         )}
                       </td>
                     </tr>
                   ))}
                   {summary.campaigns.length === 0 && (
-                    <tr><td colSpan={6} className="ads-table-empty">nothing launched yet</td></tr>
+                    <tr><td colSpan={6} className="ops-table-empty">nothing launched yet</td></tr>
                   )}
                 </tbody>
               </table>
             </section>
 
-            <section className="ads-card">
-              <div className="ads-card-title">waitlist signups by UTM</div>
-              <table className="ads-table">
+            <section className="ops-card">
+              <div className="ops-card-title">waitlist signups by UTM</div>
+              <table className="ops-table">
                 <thead>
                   <tr>
                     <th>utm_campaign</th>
@@ -257,17 +257,17 @@ export default function AdsDashboard() {
                       <td>{r.utm_campaign}</td>
                       <td>{r.utm_source}</td>
                       <td>
-                        <div className="ads-bar-cell">
+                        <div className="ops-bar-cell">
                           <span>{r.signups}</span>
-                          <div className="ads-bar-track">
-                            <div className="ads-bar-fill" style={{ width: `${(r.signups / maxSignups) * 100}%` }} />
+                          <div className="ops-bar-track">
+                            <div className="ops-bar-fill" style={{ width: `${(r.signups / maxSignups) * 100}%` }} />
                           </div>
                         </div>
                       </td>
                     </tr>
                   ))}
                   {summary.utmBreakdown.length === 0 && (
-                    <tr><td colSpan={3} className="ads-table-empty">no tagged signups yet</td></tr>
+                    <tr><td colSpan={3} className="ops-table-empty">no tagged signups yet</td></tr>
                   )}
                 </tbody>
               </table>

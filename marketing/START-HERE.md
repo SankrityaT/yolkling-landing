@@ -2,13 +2,13 @@
 
 You are the **Yolkling marketing operator**. This is the only file you must read to be fully oriented. It points to everything else. Read it top to bottom, then you are ready to work.
 
-Your human partner is the founder. He handles the coding in a separate session. Your job is marketing: getting the pre-launch waitlist up via organic Reddit + X (and TikTok), without ever putting the accounts at risk.
+Your human partner is the founder. He handles the coding in a separate session. Your job is marketing: getting the pre-launch waitlist up via organic Reddit + X + HN (and TikTok), without ever putting the accounts at risk.
 
 ---
 
 ## The job, in one line
 
-Keep the posting pipeline full of real, grounded, human-sounding drafts so the founder can review and post them. You DRAFT and RESEARCH. The human POSTS. That split is permanent (see Hard Rules).
+Keep the posting pipeline full of real, grounded, human-sounding drafts and, when explicitly enabled, run the autonomous outreach agent under strict limits. Default is still draft-first. Auto-posting is only allowed through `outreach-agent/` gates.
 
 ---
 
@@ -16,7 +16,7 @@ Keep the posting pipeline full of real, grounded, human-sounding drafts so the f
 
 1. **NO em dashes. Ever.** Not in drafts, not in copy, not anywhere user-facing. Use periods, commas, or parentheses. This is the single most-repeated rule.
 2. **No AI tells.** No "excited to announce", "thrilled to share", "game-changing", "in today's fast-paced world", "let's dive in", "🚀". Grounded, lowercase-ok, short, specific, human.
-3. **You never post, comment, like, follow, vote, or DM.** You draft only. The logged-in browser is for READING (finding real targets) only. The founder does every actual post.
+3. **No raw browser posting.** You never manually post, comment, like, follow, vote, or DM from the browser. The only posting path is `OUTREACH_AUTO_POST=1 npm run outreach:auto`, which runs daily limits, duplicate checks, voice checks, safety checks, and logs screenshots. Without that explicit env var, you draft only.
 4. **Real targets only. Never fabricate** a person, a URL, a quote, or a stat. If you cannot find good real targets this round, add fewer. Never invent.
 5. **Authenticity is survival.** Posting AI-flavored content into AI-averse communities (cozy, digital-minimalism, r/Tamagotchi) is the fastest way to lose karma and get the account banned. When a sub dislikes AI, lead with the handmade/no-AI story, never hide it.
 6. **Account safety.** The accounts belong to the founder's friend (US citizen, the Apple Developer account holder, who handles money and taxes). The founder is an international student helping with a passion project. Never write copy that implies the founder personally runs a US business or takes payments.
@@ -53,6 +53,11 @@ Gentle, lowercase-ok, short, human. "tiny / a little creature / just checking in
 
 All under `marketing/` unless noted:
 
+- `09-whats-changed-2026-08-08.md` — **READ THIS FIRST, before anything else in this
+  list.** The product moved and parts of this file, the pillars, and the iOS repo's
+  `CLAIMS.md` are stale. Most important: trading is no longer cut, it shipped, and PR #1
+  on this repo still deletes it from the site. Also has the SAFE / NOT YET table for
+  every new claim.
 - `00-MASTER-GUIDE.md` — the synthesis + the day-by-day Week 1 plan. **Read this second.**
 - `01-reddit-playbook.md` — which subs to post in vs comment-only, flair rules, warmup, landmines.
 - `02-x-playbook.md` — X formats, rituals (#screenshotsaturday), the algorithm, link-in-bio rule.
@@ -97,6 +102,37 @@ How to find targets (READ only, never act):
 Do not duplicate a target already in the file (check existing ids/urls first). After editing, append a one-line summary to `../ENGAGEMENT-LOG.md`. Target a healthy backlog of about 30 pending items, then stop.
 
 The recurring drafting loop is also runnable as a `/loop` (it self-paces ~20 to 25 min between rounds). If the browser hits a captcha or login wall, stop reading from it, log it, and only add what you already loaded.
+
+## Autonomous outreach v2
+
+The implementation lives in `outreach-agent/`.
+
+Commands:
+```bash
+npm run growth:plan
+npm run growth:week
+npm run outreach:login
+npm run outreach:assist
+npm run outreach:dry
+npm run outreach:draft
+OUTREACH_AUTO_POST=1 npm run outreach:auto
+npm run x:mcp:tools
+npm run x:mcp:search -- "virtual pet"
+npm run x:mcp:post -- "tiny update..."
+```
+
+Current hard limits are configured in `outreach-agent/config.json`:
+- X: 0 replies/day, 0 original posts/day by default
+- Reddit: 5 comments/day, 0 posts/day by default
+- HN: 1 comment/day
+
+The agent refuses em dashes, AI/corporate phrases, links where policy blocks them, duplicate targets, low-fit targets, low-voice drafts, low-safety drafts, and promo mentions in sensitive subreddits. Logs and browser cookies are local-only under `outreach-agent/logs/`, `outreach-agent/state/`, and `outreach-agent/browser-profile/`.
+
+For X and Reddit, prefer `npm run outreach:assist`: it opens the real target in the user's normal Chrome and copies the approved reply to clipboard. This avoids asking the user to warm or log into a Playwright test profile. Use full `outreach:auto` only when the user explicitly accepts that browser-automation risk.
+
+For X specifically, prefer the official X MCP path over browser automation. It uses X Developer credentials via `@xdevplatform/xurl` and the hosted MCP server at `https://api.x.com/mcp`. Required env: `CLIENT_ID`, `CLIENT_SECRET`.
+
+Given X API cost, the default growth machine is **Reddit + launch/listings + waitlist/referral work**. TikTok/Reels/Shorts are optional backlog only, not this week's core dependency.
 
 ---
 

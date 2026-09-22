@@ -19,7 +19,19 @@ export async function POST(req: Request) {
   const authError = checkAdsAuth(req);
   if (authError) return authError;
 
-  let input: { platform: "meta" | "google"; hook: string; utmCampaign: string; dailyBudgetCents: number; lifetimeBudgetCents?: number };
+  let input: {
+    platform: "meta" | "google";
+    hook: string;
+    utmCampaign: string;
+    dailyBudgetCents: number;
+    lifetimeBudgetCents?: number;
+    keywords?: string[];
+    headlines?: string[];
+    descriptions?: string[];
+    geoTargetConstant?: string;
+    languageConstant?: string;
+    validateOnly?: boolean;
+  };
   try {
     input = await req.json();
   } catch {
@@ -31,6 +43,23 @@ export async function POST(req: Request) {
       { status: 400 }
     );
   }
+  if (input.platform === "google") {
+    const missing = [
+      (!input.keywords || !input.keywords.length) && "keywords",
+      (!input.headlines || input.headlines.length < 3) && "headlines (need at least 3)",
+      (!input.descriptions || input.descriptions.length < 2) && "descriptions (need at least 2)",
+      !input.geoTargetConstant && "geoTargetConstant",
+    ].filter(Boolean);
+    if (missing.length) {
+      return NextResponse.json({ ok: false, error: `google campaigns also need: ${missing.join(", ")}` }, { status: 400 });
+    }
+  }
+
+  // The one link every click actually lands on, tagged so it attributes back to
+  // exactly this campaign in the waitlist UTM breakdown.
+  const finalUrl = `https://yolkling.com/?utm_source=${input.platform}&utm_medium=paid&utm_campaign=${encodeURIComponent(
+    input.utmCampaign
+  )}&utm_content=${encodeURIComponent(input.hook)}`;
 
   // Hard caps, checked before anything touches a real ad platform.
   try {
@@ -63,16 +92,35 @@ export async function POST(req: Request) {
   }
 
   try {
-    const { externalCampaignId } = await adapter.createCampaign({
+    const result = await adapter.createCampaign({
       name: `yolkling — ${input.hook} — ${input.utmCampaign}`,
       dailyBudgetCents: input.dailyBudgetCents,
+      keywords: input.keywords ?? [],
+      headlines: input.headlines ?? [],
+      descriptions: input.descriptions ?? [],
+      finalUrl,
+      geoTargetConstant: input.geoTargetConstant ?? "2840",
+      languageConstant: input.languageConstant,
+      validateOnly: input.validateOnly,
     });
+
+    if (result.validated) {
+      // Dry-run: Google confirmed the whole chain is valid, nothing was created,
+      // so there's no external id yet and this campaign stays in draft.
+      await updateCampaign(row.id, { status_detail: "validated ok, not launched (validateOnly)" });
+      return NextResponse.json({ ok: true, validated: true, campaign: row });
+    }
+
     await updateCampaign(row.id, {
-      external_campaign_id: externalCampaignId,
+      external_campaign_id: result.externalCampaignId,
       status: "active",
       launched_at: new Date().toISOString(),
     });
-    return NextResponse.json({ ok: true, campaign: { ...row, external_campaign_id: externalCampaignId, status: "active" } });
+    return NextResponse.json({
+      ok: true,
+      campaign: { ...row, external_campaign_id: result.externalCampaignId, status: "active" },
+      finalUrl,
+    });
   } catch (e: any) {
     const detail = String(e.message || e);
     await updateCampaign(row.id, { status: "failed", status_detail: detail });

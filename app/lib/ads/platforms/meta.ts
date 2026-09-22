@@ -38,10 +38,14 @@ async function graphFetch(path: string, init: RequestInit = {}) {
   return body;
 }
 
-export async function createCampaign(input: {
-  name: string;
-  dailyBudgetCents: number;
-}): Promise<{ externalCampaignId: string }> {
+import type { CreateCampaignInput } from "./index";
+
+// Search-specific fields (keywords, headlines, geo/language targeting) on
+// CreateCampaignInput are accepted for interface compatibility with the shared
+// PlatformAdapter type, unused here. Meta's ad set + creative layer is still not
+// built (blocked on Meta access as of 2026-08-09), see the file header. This still
+// only creates the campaign object.
+export async function createCampaign(input: CreateCampaignInput): Promise<{ externalCampaignId: string }> {
   const { adAccountId, accessToken } = requireConfig();
   const body = await graphFetch(`${adAccountId}/campaigns`, {
     method: "POST",
