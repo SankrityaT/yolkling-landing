@@ -135,11 +135,12 @@ export default function TermsPage() {
           cancelling stops the next renewal, not the period you already paid for.
         </p>
         <p>
-          on price. the price is always shown in the app before you buy anything, and prices can
-          change. the founding price is not guaranteed to last forever. if we ever raise the price on
-          a subscription you already have, apple will ask you to agree first, and if you do not
-          agree it simply will not renew at the new price. you will never be charged more without
-          saying yes.
+          on price. the price is always shown in the app before you buy anything. $4.99 a month and
+          $34.99 a year are founding prices, and we may raise the price for new subscribers later. if
+          you subscribe at a founding price, you keep that price for as long as your subscription
+          stays active, even after it goes up for everyone else. if your subscription ends and you
+          start a new one later, the price at that time applies, and switching to a different plan is
+          priced at that plan&apos;s current price. you will never be charged more without saying yes.
         </p>
         <p>
           refunds go through apple, not us, under apple&apos;s media services terms. we cannot

@@ -268,7 +268,7 @@ export const BODY = `
     <div class="store-wrap">
       <div class="store-copy">
         <h2 class="big-h">a little shop of hats, rooms and rare colours.</h2>
-        <p class="store-lead">yolks are earned by living: check-ins, focus sessions, steps, sleep, streaks. spend them on the closet and the room. they are never for sale, at any price.</p>
+        <p class="store-lead">yolks are earned by living: check-ins, focus sessions, steps, sleep, streaks. spend them on the closet and the room. they are never sold on their own.</p>
         <div class="seg" role="tablist" aria-label="shop tabs">
           <button class="seg-btn" role="tab" type="button" data-tab="colours" aria-selected="false">Colours</button>
           <button class="seg-btn is-on" role="tab" type="button" data-tab="outfit" aria-selected="true">Outfit</button>
@@ -311,7 +311,7 @@ export const BODY = `
         <a href="#top" class="plan-btn plan-btn-feat when-wl" data-magnetic data-cursor="join">join the list</a><a href="__APP_STORE__" class="plan-btn plan-btn-feat when-live" data-magnetic>get the app</a>
       </article>
     </div>
-    <p class="pricing-note">prices above are founding prices for people who join now, they won't stay this low forever. we'll also be adding more optional extras over time, things like limited edition cosmetics and seasonal drops, always cosmetic, never required to play.</p>
+    <p class="pricing-note">prices above are founding prices. they'll go up for new people later, but join now and you keep yours. we'll also be adding more optional extras over time, things like limited edition cosmetics and seasonal drops, always cosmetic, never required to play.</p>
   </section>
 
   <footer class="outro" id="outro">
