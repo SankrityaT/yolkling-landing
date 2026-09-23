@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 // straight into Friends and this page is never seen. Without it, this is what the friend
 // lands on, so it has to say who invited them and how to get the app. It used to 404.
 
-const APP_STORE_URL = "https://apps.apple.com/app/id6804105200";
+const APP_STORE_URL = "https://apps.apple.com/app/apple-store/id6804105200?pt=129291564&ct=invite-page&mt=8";
 const isCode = (c: string) => /^YOLK-[A-Z0-9]{3,12}$/.test(c);
 
 export const metadata: Metadata = {
