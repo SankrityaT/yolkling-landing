@@ -9,10 +9,10 @@ export const metadata: Metadata = {
     template: "%s · Yolkling",
   },
   description:
-    `remember keeping a tamagotchi alive? this one looks after you. hatch a one of a kind creature that grows from your real sleep and steps, and visits your friends. for iPhone, on the App Store.`,
+    `remember keeping a little digital pet alive? this one looks after you. hatch a one of a kind creature that grows from your real sleep and steps, and visits your friends. for iPhone, on the App Store.`,
   keywords: [
     "yolkling", "virtual pet", "virtual pet app", "cozy app", "self care app",
-    "tamagotchi", "tamagotchi app", "digital pet", "apple health pet", "creature companion", "ios app", "digital wellbeing",
+    "digital pet", "digital pet app", "apple health pet", "creature companion", "ios app", "digital wellbeing",
     "screen time", "put your phone down", "cute app",
   ],
   applicationName: "Yolkling",
