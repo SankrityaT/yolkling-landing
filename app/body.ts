@@ -45,7 +45,7 @@ export const BODY = `
       <p class="hero-eyebrow mono"><span class="pip"></span> a little creature, secretly you</p>
       <h1 class="hero-h1">
         <span class="line-mask"><span class="line">he grows</span></span>
-        <span class="line-mask"><span class="line">when <span class="wob">you</span> do.</span></span>
+        <span class="line-mask"><span class="line">with <span class="wob">you</span>.</span></span>
       </h1>
       <p class="hero-sub">sleep well, take a walk, put the phone down. he feels all of it.</p>
       <div class="when-wl">
@@ -148,7 +148,7 @@ export const BODY = `
   <section class="feeds" id="feeds">
     <div class="section-head"><span class="sh" data-hatch="1"><i class="sh-egg" aria-hidden="true"></i><span class="sh-label">the flip</span></span></div>
     <div class="feeds-head">
-      <h2 class="big-h">you kept a tamagotchi alive.<br/>this one looks after <span class="wob2">you.</span></h2>
+      <h2 class="big-h">you kept a digital pet alive.<br/>this one looks after <span class="wob2">you.</span></h2>
     </div>
     <div class="tiles">
       <article class="tile tile-lemon" data-cycle>
@@ -325,7 +325,7 @@ export const BODY = `
       <div class="footer-col mono"><a href="/support">support</a><a href="/press">press</a><a href="/privacy">privacy</a><a href="/terms">terms</a></div>
       <div class="footer-col mono footer-status"><p class="live when-wl">● <span id="footLive">early access is open</span></p><p class="live when-live">● out now on the App Store</p><p>made by two people, with snacks and feelings</p><p>© 2026, please drink water</p></div>
     </div>
-    <p class="footer-legal">Apple, the Apple logo, iPhone and Apple Health are trademarks of Apple Inc., registered in the U.S. and other countries. App Store is a service mark of Apple Inc. Tamagotchi is a trademark of Bandai. Yolkling is not affiliated with Apple or Bandai.</p>
+    <p class="footer-legal">Apple, the Apple logo, iPhone and Apple Health are trademarks of Apple Inc., registered in the U.S. and other countries. App Store is a service mark of Apple Inc. Yolkling is not affiliated with Apple.</p>
   </footer>
 </div>
 `;
