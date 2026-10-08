@@ -44,8 +44,8 @@ export const BODY = `
     <div class="hero-text">
       <p class="hero-eyebrow mono"><span class="pip"></span> a little creature, secretly you</p>
       <h1 class="hero-h1">
-        <span class="line-mask"><span class="line">he grows</span></span>
-        <span class="line-mask"><span class="line">with <span class="wob">you</span>.</span></span>
+        <span class="line-mask"><span class="line">a virtual pet</span></span>
+        <span class="line-mask"><span class="line">that grows <br class="m-only"/>with <span class="wob">you</span>.</span></span>
       </h1>
       <p class="hero-sub">sleep well, take a walk, put the phone down. he feels all of it.</p>
       <div class="when-wl">
