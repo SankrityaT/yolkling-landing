@@ -404,6 +404,8 @@ body{ background:var(--bg); }
 .cr-body{ background:#FFC23B; box-shadow:inset -16px -20px 0 rgba(0,0,0,.09), 0 24px 50px rgba(232,162,30,.30); }
 .cr-arm{ background:#FFC23B; } .cr-foot{ background:#E8A21E; }
 .dot-logo, .pip{ background:#FFC23B !important; }
+/* the mark in the nav is the little guy himself, not a dot */
+.nav-logo .dot-logo{ width:28px; height:28px; border-radius:0; box-shadow:none; background:url(/icon.svg) center/contain no-repeat !important; flex:none; }
 
 /* waitlist form */
 .waitlist{ display:flex; gap:.6rem; max-width:440px; margin-top:1.2rem; flex-wrap:wrap; justify-content:center; }
