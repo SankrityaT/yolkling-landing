@@ -51,6 +51,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           href="https://fonts.googleapis.com/css2?family=Onest:wght@500;600;700;800;900&family=DM+Sans:opsz,wght@9..40,400..600&family=DM+Mono:wght@400;500&display=swap"
           rel="stylesheet"
         />
+        <script async src="https://aromatic-caribou-889.convex.site/api/a/am_sv0X6TlgGl9IpnUo"></script>
       </head>
       <body>{children}</body>
     </html>

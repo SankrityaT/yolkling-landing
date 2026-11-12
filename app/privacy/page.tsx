@@ -165,8 +165,8 @@ export default function PrivacyPage() {
 
         <h2>what we do not do</h2>
         <p>
-          no advertising. no analytics or tracking sdks. no selling data, ever. no third party
-          trackers. and health and screen time data never leave your device, full stop.
+          no advertising. no analytics or tracking sdks in the app. no selling data, ever. no third
+          party trackers. and health and screen time data never leave your device, full stop.
         </p>
 
         <h2>how it is stored</h2>
@@ -196,10 +196,9 @@ export default function PrivacyPage() {
 
         <h2>cookies and analytics</h2>
         <p>
-          the website does not set tracking cookies, and we do not run third party advertising or
-          analytics that follow you around. if we ever add a small privacy friendly way to count
-          visits, it will be the kind that does not identify you, and we will update this page to say
-          so honestly.
+          the website uses a small visitor analytics script so we can count visits and see which
+          pages people read. we do not run advertising on the website, we do not sell what it
+          counts, and the app itself has no analytics at all.
         </p>
 
         <h2>children</h2>
